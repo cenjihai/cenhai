@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cenhai.system.mapper.SysRoleMapper">
+
+    <resultMap id="BaseResultMap" type="com.cenhai.system.domain.SysRole">
+            <id property="roleId" column="role_id" jdbcType="BIGINT"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="roleKey" column="role_key" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="status" column="status" jdbcType="CHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        role_id,name,role_key,
+        create_time,update_time
+    </sql>
+
+    <select id="listByUserId" parameterType="Long" resultMap="BaseResultMap">
+        select r.* from sys_role r
+        left join sys_user_role ur on ur.role_id = r.role_id
+        where ur.user_id = #{userId}
+    </select>
+
+    <select id="listRoleIdAndRoleKeyByUserId" parameterType="Long" resultMap="BaseResultMap">
+        select r.role_id, r.role_key from sys_role r
+        left join sys_user_role ur on ur.role_id = r.role_id
+        where ur.user_id = #{userId} and r.status = '0'
+    </select>
+
+    <select id="listRole" resultMap="BaseResultMap" parameterType="com.cenhai.system.domain.dto.RoleQueryForm">
+        select * from sys_role where 1 = 1
+        <if test="startTime != null and startTime != ''"><!-- 开始时间检索 -->
+            and date_format(create_time,'%y%m%d') &gt;= date_format(#{startTime},'%y%m%d')
+        </if>
+        <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
+            and date_format(create_time,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
+        </if>
+        <if test="name !='' and name != null">
+            and name = #{name}
+        </if>
+        <if test="status !='' and status != null">
+            and status = #{status}
+        </if>
+        <if test="roleKey != '' and roleKey != null">
+            and role_key = #{roleKey}
+        </if>
+    </select>
+
+    <select id="listRoleByPermId" resultMap="BaseResultMap" parameterType="Long">
+        select r.* from sys_role r
+        left join sys_role_permission rp on r.role_id = rp.role_id
+        where rp.perm_id = #{permId} order by create_time desc
+    </select>
+</mapper>

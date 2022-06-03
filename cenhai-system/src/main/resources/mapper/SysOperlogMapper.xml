@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cenhai.system.mapper.SysOperlogMapper">
+
+    <resultMap id="BaseResultMap" type="com.cenhai.system.domain.SysOperlog">
+            <id property="operId" column="oper_id" jdbcType="BIGINT"/>
+            <result property="userId" column="user_id" jdbcType="BIGINT"/>
+            <result property="title" column="title" jdbcType="VARCHAR"/>
+            <result property="info" column="info" jdbcType="VARCHAR"/>
+            <result property="operIp" column="oper_ip" jdbcType="VARCHAR"/>
+            <result property="operUrl" column="oper_url" jdbcType="VARCHAR"/>
+            <result property="params" column="params" jdbcType="VARCHAR"/>
+            <result property="errMsg" column="err_msg" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="CHAR"/>
+            <result property="createTime" column="create_time" jdbcType="DATE"/>
+            <result property="userDetails" column="user_details" jdbcType="VARCHAR"/>
+            <result property="action" column="action" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        oper_id,user_id,title,
+        info,oper_ip,oper_url,
+        params,err_msg,status,
+        create_time,user_details,action
+    </sql>
+
+    <select id="listOperlog" resultMap="BaseResultMap" parameterType="com.cenhai.system.domain.dto.OperlogQueryForm">
+        select oper_id,user_id,title,
+        info,oper_ip,oper_url,status,
+        create_time,user_details from sys_operlog where 1 = 1
+        <if test="userId != null and userId !=''">
+            and user_id = #{userId}
+        </if>
+        <if test="status != null and status !=''">
+            and status = #{status}
+        </if>
+        <if test="title != null and title !=''">
+            and title = #{title}
+        </if>
+        <if test="startTime != null and startTime != ''"><!-- 开始时间检索 -->
+            and date_format(create_time,'%y%m%d') &gt;= date_format(#{startTime},'%y%m%d')
+        </if>
+        <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
+            and date_format(create_time,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
+        </if>
+        order by oper_id desc
+    </select>
+</mapper>

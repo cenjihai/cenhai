@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cenhai.system.mapper.SysConfigMapper">
+
+    <resultMap id="BaseResultMap" type="com.cenhai.system.domain.SysConfig">
+            <id property="configId" column="config_id" jdbcType="BIGINT"/>
+            <result property="configName" column="config_name" jdbcType="VARCHAR"/>
+            <result property="configKey" column="config_key" jdbcType="VARCHAR"/>
+            <result property="configValue" column="config_value" jdbcType="VARCHAR"/>
+            <result property="widget" column="widget" jdbcType="VARCHAR"/>
+            <result property="options" column="options" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="CHAR"/>
+            <result property="groupId" column="group_id" jdbcType="BIGINT"/>
+            <result property="configOrder" column="config_order" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        config_id,config_name,config_key,
+        config_value,widget,options,
+        create_time,update_time,remark,
+        status,group_id,config_order
+    </sql>
+</mapper>

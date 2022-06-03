@@ -1,0 +1,25 @@
+#项目配置
+cenhai:
+  #名称
+  name: cenhai
+  #版本
+  version: 1.0
+  #文件路径
+  profile: D://home
+
+server:
+  port: 8080
+spring:
+  application:
+    name: admin
+  profiles:
+    active: druid
+mybatis-plus:
+  type-aliases-package: com.cenhai.*.domain
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+token:
+  header: Authorization
+  secret: dasd12s3ad1a23
+  expireTime: 300
