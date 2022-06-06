@@ -19,10 +19,12 @@
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
+        <java.version>11</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <springboot.version>2.5.12</springboot.version>
         <druid.version>1.2.8</druid.version>
         <swagger.version>3.0.0</swagger.version>
-        <mybatis-plus.version>3.4.3</mybatis-plus.version>
+        <mybatis-plus.version>3.5.1</mybatis-plus.version>
         <pagehelper.boot.version>1.4.0</pagehelper.boot.version>
         <fastjson.version>1.2.78</fastjson.version>
         <cenjihai.version>1.0.0</cenjihai.version>
@@ -111,4 +113,19 @@
             <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

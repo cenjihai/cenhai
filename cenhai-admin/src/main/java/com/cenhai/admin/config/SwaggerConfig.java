@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.cenhai.common.config.SystemConfig;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import io.swagger.annotations.ApiOperation;
@@ -22,6 +21,8 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 
+import javax.annotation.Resource;
+
 /**
  * Swagger2的接口配置
  *
@@ -31,7 +32,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 public class SwaggerConfig
 {
 
-    @Autowired
+    @Resource
     private SystemConfig systemConfig;
 
     /**

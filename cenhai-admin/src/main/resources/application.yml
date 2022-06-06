@@ -5,7 +5,7 @@ cenhai:
   #版本
   version: 1.0
   #文件路径
-  profile: D://home
+  profile: /home/resource
 
 #插件开发配置
 plugin:
@@ -18,8 +18,8 @@ plugin:
   runMode: prod
   mainPackage: com.cenhai
   pluginPath:
-    - D:\home\plugins
-  backupPath: D:\home\temp
+    - /home/resource/plugins
+  backupPath: /home/resource/backup
 server:
   port: 8080
 spring:
@@ -32,10 +32,13 @@ spring:
       max-file-size: 100MB
       max-request-size: 100MB
 mybatis-plus:
-  type-aliases-package: com.cenhai.*.domain
+  mapper-locations: classpath*:/mapper/*.xml
+  type-aliases-package: com.cenhai.**.domain
   configuration:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    local-cache-scope: session
+
 token:
   header: Authorization
   secret: dasd12s3ad1a23

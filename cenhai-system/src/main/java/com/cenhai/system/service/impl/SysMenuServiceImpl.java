@@ -79,7 +79,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu>
     public boolean deleteMenuByMenuId(Long menuId) {
         QueryWrapper<SysMenu> wrapper = new QueryWrapper();
         wrapper.eq("parent_menu_id",menuId);
-        int count = count(wrapper);
+        long count = count(wrapper);
         if (count > 0)throw new ServiceException("请先删除当前项的子项");
         return removeById(menuId);
     }

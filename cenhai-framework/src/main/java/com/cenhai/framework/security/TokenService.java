@@ -8,7 +8,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -65,7 +64,7 @@ public class TokenService {
         String clientDetails = userAgent.getOperatingSystem().getName() + "-" + userAgent.getBrowser().getName();
         String ipaddr = IpUtils.getIpAddr(request);
         if (!userDetails.getClientDetails().equals(clientDetails) && userDetails.getIpaddr().equals(ipaddr)){
-            throw new InternalAuthenticationServiceException("登录环境异常，请重新登录");
+            //throw new ServiceException("登录环境异常，请重新登录");
         }
     }
 

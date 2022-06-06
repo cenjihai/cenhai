@@ -46,7 +46,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser>
     @Override
     @Transactional
     public boolean updateUserRoleByUserId(Long userId, Collection<Long> roleIds) {
-        QueryWrapper wrapper = new QueryWrapper();
+        QueryWrapper<SysUserRole> wrapper = new QueryWrapper();
         wrapper.eq("user_id",userId);
         userRoleService.remove(wrapper);
         List<SysUserRole> userRoles = new ArrayList<>();

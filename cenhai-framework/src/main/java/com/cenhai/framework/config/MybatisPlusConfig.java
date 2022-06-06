@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.config.GlobalConfig;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import org.apache.commons.lang3.time.DateUtils;
 import org.apache.ibatis.reflection.MetaObject;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
@@ -13,12 +12,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.*;
 
 @Configuration
 @EnableTransactionManagement
-@MapperScan("com.cenhai.*.mapper")
+@MapperScan("com.cenhai.**.mapper")
 public class MybatisPlusConfig {
 
     @Bean
@@ -35,6 +33,7 @@ public class MybatisPlusConfig {
     public GlobalConfig globalConfig() {
         GlobalConfig globalConfig = new GlobalConfig();
         globalConfig.setMetaObjectHandler(new AutoUpdateDateMetaObjectHandler());
+        globalConfig.setBanner(false);
         return globalConfig;
     }
 

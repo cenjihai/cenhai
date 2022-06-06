@@ -28,15 +28,37 @@
             <artifactId>cenhai-framework</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.cenhai</groupId>
-            <artifactId>cenhai-system</artifactId>
-            <version>1.0.0</version>
-        </dependency>
+
         <dependency>
             <groupId>com.gitee.starblues</groupId>
             <artifactId>spring-brick</artifactId>
         </dependency>
 
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.gitee.starblues</groupId>
+                <artifactId>spring-brick-maven-packager</artifactId>
+                <version>3.0.2</version>
+                <configuration>
+                    <mode>main</mode>
+                    <mainConfig>
+                        <mainClass>com.cenhai.admin.AdminApplication</mainClass>
+                        <packageType>jar</packageType>
+                        <fileName>${project.artifactId}</fileName>
+                    </mainConfig>
+                    <includeSystemScope>false</includeSystemScope>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

@@ -13,9 +13,6 @@
         <module name="cenhai-admin" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="cenhai-plugs-mqtt" target="11" />
-      <module name="cenhai-plugs-test" target="11" />
-    </bytecodeTargetLevel>
+    <bytecodeTargetLevel target="11" />
   </component>
 </project>

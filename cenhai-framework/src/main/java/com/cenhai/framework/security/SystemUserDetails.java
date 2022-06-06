@@ -1,5 +1,6 @@
 package com.cenhai.framework.security;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.cenhai.common.constant.Constants;
 import com.cenhai.system.domain.SysUserAuth;
 import org.springframework.security.core.GrantedAuthority;
@@ -52,6 +53,7 @@ public class SystemUserDetails implements UserDetails {
     }
 
     @Override
+    @JSONField(serialize = false)
     public String getPassword() {
         return this.password;
     }
@@ -62,21 +64,25 @@ public class SystemUserDetails implements UserDetails {
     }
 
     @Override
+    @JSONField(serialize = false)
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JSONField(serialize = false)
     public boolean isAccountNonLocked() {
         return Constants.NORMAL.equals(userAuth.getStatus());
     }
 
     @Override
+    @JSONField(serialize = false)
     public boolean isCredentialsNonExpired() {
         return Constants.YES.equals(userAuth.getVerified());
     }
 
     @Override
+    @JSONField(serialize = false)
     public boolean isEnabled() {
         return true;
     }
