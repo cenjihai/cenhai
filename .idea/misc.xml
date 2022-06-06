@@ -11,6 +11,7 @@
       <set>
         <option value="$PROJECT_DIR$/cenhai-plugs-redis/pom.xml" />
         <option value="$PROJECT_DIR$/cenhai-plugs/cenhai-plugs-mqtt/pom.xml" />
+        <option value="$PROJECT_DIR$/cenhai-plugs/cenhai-plugs-test/pom.xml" />
       </set>
     </option>
   </component>

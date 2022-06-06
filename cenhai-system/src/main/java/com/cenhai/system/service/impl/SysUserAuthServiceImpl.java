@@ -3,7 +3,6 @@ package com.cenhai.system.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cenhai.common.constant.Constants;
-import com.cenhai.common.constant.IdentityType;
 import com.cenhai.common.exception.ServiceException;
 import com.cenhai.common.utils.StringUtils;
 import com.cenhai.system.domain.SysUserAuth;
@@ -13,11 +12,6 @@ import com.cenhai.system.mapper.SysUserAuthMapper;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
 * @author a
@@ -36,37 +30,18 @@ public class SysUserAuthServiceImpl extends ServiceImpl<SysUserAuthMapper, SysUs
      * @return
      */
     @Override
-    public SysUserAuth getUserAuthByIdentifierAndIdentityType(String identifier, IdentityType identityType) {
+    public SysUserAuth getUserAuthByIdentifierAndIdentityType(String identifier, String identityType) {
         return getOne(new QueryWrapper<SysUserAuth>()
-                .eq("identity_type",identityType.getValue())
+                .eq("identity_type",identityType)
                 .eq("identifier", identifier));
     }
 
-    /**
-     * 获取用户已经设置的所有认证信息
-     *
-     * @param userId
-     * @return
-     */
-    @Override
-    public Map<String,SysUserAuth> listUserAuthInfoByUserId(Long userId) {
-        List<SysUserAuth> list = baseMapper.listByUserId(userId);
-        Map<String,SysUserAuth> resultMap = new HashMap<>();
-        for (SysUserAuth userAuth: list){
-            userAuth.setCredential(null);
-            resultMap.put(userAuth.getIdentityType(), userAuth);
-        }
-        return resultMap;
-    }
 
     @Override
-    public SysUserAuth getByUserIdAndIdentityType(Long userId, IdentityType identityType) {
-        return baseMapper.getByUserIdAndIdentityType(userId, identityType.getValue());
-    }
-
-    @Override
-    public int batchDeleteByUserIds(Collection<Long> ids) {
-        return baseMapper.batchDeleteByUserIds(ids);
+    public SysUserAuth getPasswordTypeByUserId(Long userId) {
+        return getOne(new QueryWrapper<SysUserAuth>()
+                .eq("user_id",userId)
+                .eq("identity_type",Constants.DEFAULT_SECURITY_IDENTITY_TYPE));
     }
 
     /**
@@ -77,14 +52,14 @@ public class SysUserAuthServiceImpl extends ServiceImpl<SysUserAuthMapper, SysUs
      */
     @Override
     public boolean updateOrSaveUserAuthByPassword(SysUserAuth userAuth) {
-        userAuth.setIdentityType(IdentityType.password.getValue());
+        userAuth.setIdentityType(Constants.DEFAULT_SECURITY_IDENTITY_TYPE);
         if (StringUtils.isEmpty(userAuth.getCredential())){
             userAuth.setCredential(null);
         }else {
             userAuth.setCredential(new BCryptPasswordEncoder().encode(userAuth.getCredential()));
         }
         if (StringUtils.isNull(userAuth.getAuthId())){
-            userAuth.setVerified(Constants.NORMAL);
+            userAuth.setVerified(Constants.YES);
             try {
                 return save(userAuth);
             }catch (DuplicateKeyException e){
@@ -107,7 +82,7 @@ public class SysUserAuthServiceImpl extends ServiceImpl<SysUserAuthMapper, SysUs
      */
     @Override
     public boolean updateUserAuthByPasswordAndUserId(SimplePasswordForm form) {
-        SysUserAuth userAuth = baseMapper.getByUserIdAndIdentityType(form.getUserId(),IdentityType.password.getValue());
+        SysUserAuth userAuth = getPasswordTypeByUserId(form.getUserId());
         if (StringUtils.isNull(userAuth))throw new ServiceException("未开启密码认证方式!");
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         if (!passwordEncoder.matches(form.getOldCredential(),userAuth.getCredential()))

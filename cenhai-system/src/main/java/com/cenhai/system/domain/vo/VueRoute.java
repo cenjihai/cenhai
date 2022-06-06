@@ -30,7 +30,7 @@ public class VueRoute implements Serializable {
     public VueRoute(SysMenu menu){
         this.name = menu.getPath();
         this.path = menu.getPath();
-        this.hidden = Constants.DISABLE.equals(menu.getHidden());
+        this.hidden = Constants.YES.equals(menu.getHidden());
         this.component = menu.getComponent();
         this.meta = new VueRouteMeta(menu);
     }

@@ -6,7 +6,6 @@ import com.cenhai.common.utils.StringUtils;
 import com.cenhai.system.domain.SysUser;
 import com.cenhai.system.domain.SysUserRole;
 import com.cenhai.system.domain.dto.UserQueryForm;
-import com.cenhai.system.service.SysUserAuthService;
 import com.cenhai.system.service.SysUserRoleService;
 import com.cenhai.system.service.SysUserService;
 import com.cenhai.system.mapper.SysUserMapper;
@@ -29,9 +28,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser>
     implements SysUserService{
 
     @Autowired
-    private SysUserAuthService userAuthService;
-
-    @Autowired
     private SysUserRoleService userRoleService;
 
     @Override
@@ -44,7 +40,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser>
     public boolean deleteByUserIds(Collection<Long> ids) {
         if (StringUtils.isEmpty(ids))return false;
         removeByIds(ids);
-        userAuthService.batchDeleteByUserIds(ids);
         return true;
     }
 

@@ -6,8 +6,8 @@ import com.cenhai.common.utils.IpUtils;
 import com.cenhai.common.utils.ServletUtils;
 import com.cenhai.common.utils.StringUtils;
 import com.cenhai.framework.annotation.Log;
-import com.cenhai.framework.security.DefaultUserDetails;
 import com.cenhai.framework.security.SecurityUtils;
+import com.cenhai.framework.security.SystemUserDetails;
 import com.cenhai.system.domain.SysOperlog;
 import com.cenhai.system.service.SysOperlogService;
 import org.aspectj.lang.JoinPoint;
@@ -64,7 +64,7 @@ public class LogAspect {
     private void logHandler(final JoinPoint joinPoint, Log log, final Exception e, Object obj){
         SysOperlog operlog = new SysOperlog();
         try {
-            DefaultUserDetails userDetails = SecurityUtils.getUserDetails();
+            SystemUserDetails userDetails = SecurityUtils.getUserDetails();
             if (userDetails != null) {
                 operlog.setUserId(userDetails.getUserId());
                 operlog.setUserDetails(userDetails.getAccessToken()+ "-" + userDetails.getIpaddr());

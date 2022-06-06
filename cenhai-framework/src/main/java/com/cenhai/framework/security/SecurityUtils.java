@@ -1,7 +1,6 @@
 package com.cenhai.framework.security;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.ArrayList;
@@ -14,10 +13,10 @@ public class SecurityUtils {
         return getUserDetails().getUserId();
     }
 
-    public static DefaultUserDetails getUserDetails(){
+    public static SystemUserDetails getUserDetails(){
         Object o = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (o instanceof DefaultUserDetails)
-            return (DefaultUserDetails) o;
+        if (o instanceof SystemUserDetails)
+            return (SystemUserDetails) o;
         return null;
     }
 

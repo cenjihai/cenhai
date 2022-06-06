@@ -1,12 +1,9 @@
 package com.cenhai.system.service;
 
-import com.cenhai.common.constant.IdentityType;
 import com.cenhai.system.domain.SysUserAuth;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cenhai.system.domain.dto.SimplePasswordForm;
 
-import java.util.Collection;
-import java.util.Map;
 
 /**
 * @author a
@@ -20,29 +17,14 @@ public interface SysUserAuthService extends IService<SysUserAuth> {
      * @param identifier
      * @return
      */
-    SysUserAuth getUserAuthByIdentifierAndIdentityType(String identifier, IdentityType identityType);
+    SysUserAuth getUserAuthByIdentifierAndIdentityType(String identifier, String identityType);
 
     /**
-     * 获取用户已经设置的所有认证信息
-     * @param userId
-     * @return
-     */
-    Map<String,SysUserAuth> listUserAuthInfoByUserId(Long userId);
-
-    /**
-     * 获取用户认证方式信息
+     * 获取密码认证方式的信息
      * @param userId 用户ID
-     * @param identityType 认证方式
      * @return
      */
-    SysUserAuth getByUserIdAndIdentityType(Long userId, IdentityType identityType);
-
-    /**
-     * 批量删除
-     * @param ids 用户id 列表
-     * @return
-     */
-    int batchDeleteByUserIds(Collection<Long> ids);
+    SysUserAuth getPasswordTypeByUserId(Long userId);
 
     /**
      * 更新或新增 密码认证方式

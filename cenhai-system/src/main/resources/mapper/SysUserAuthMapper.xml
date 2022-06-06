@@ -22,17 +22,4 @@
         status,create_time,update_time
     </sql>
 
-    <select id="getByUserIdAndIdentityType" resultMap="BaseResultMap">
-        select * from sys_user_auth where user_id = #{userId} and identity_type = #{identityType} limit 1
-    </select>
-
-    <select id="listByUserId" resultMap="BaseResultMap">
-        select * from sys_user_auth where user_id = #{userId}
-    </select>
-    
-    <delete id="batchDeleteByUserIds" parameterType="collection">
-        delete from sys_user_auth where user_id in <foreach collection="collection" item="id" open="(" separator="," close=")">
-        #{id}
-    </foreach>
-    </delete>
 </mapper>

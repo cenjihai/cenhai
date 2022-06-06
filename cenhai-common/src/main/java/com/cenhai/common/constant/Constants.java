@@ -27,4 +27,9 @@ public class Constants {
     public final static String CAPTCHA_REDIS_KEY = "Authorization:captcha:";
 
     public final static Integer CAPTCHA_EXPIRATION = 2;
+
+    /**
+     * 默认身份认证类型
+     */
+    public final static String DEFAULT_SECURITY_IDENTITY_TYPE = "password";
 }

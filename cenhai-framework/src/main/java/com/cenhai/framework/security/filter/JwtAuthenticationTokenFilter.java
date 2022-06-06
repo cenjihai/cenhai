@@ -1,9 +1,9 @@
 package com.cenhai.framework.security.filter;
 
-import com.cenhai.framework.security.DefaultUserDetails;
+import com.cenhai.framework.security.SystemUserDetails;
 import com.cenhai.framework.security.TokenService;
-import com.cenhai.framework.security.extension.GenericAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -30,11 +30,11 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException
     {
-        DefaultUserDetails userDetails = tokenService.getUserDetails(request);
+        SystemUserDetails userDetails = tokenService.getUserDetails(request);
          if (userDetails != null && SecurityContextHolder.getContext().getAuthentication() == null)
         {
             tokenService.verifyToken(userDetails);
-            GenericAuthenticationToken authenticationToken = new GenericAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }

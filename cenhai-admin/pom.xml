@@ -11,12 +11,18 @@
 
     <artifactId>cenhai-admin</artifactId>
 
-    <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-    </properties>
-
     <dependencies>
+        <!-- swagger3-->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
+        </dependency>
+        <!-- 防止进入swagger页面报类型转换错误，排除3.0.0中的引用，手动增加1.6.2版本 -->
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-models</artifactId>
+            <version>1.6.2</version>
+        </dependency>
         <dependency>
             <groupId>com.cenhai</groupId>
             <artifactId>cenhai-framework</artifactId>
@@ -27,5 +33,10 @@
             <artifactId>cenhai-system</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.gitee.starblues</groupId>
+            <artifactId>spring-brick</artifactId>
+        </dependency>
+
     </dependencies>
 </project>

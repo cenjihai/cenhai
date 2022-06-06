@@ -1,6 +1,5 @@
 package com.cenhai.admin.controller;
 
-import com.cenhai.common.constant.IdentityType;
 import com.cenhai.common.utils.HeadimgUtils;
 import com.cenhai.common.web.controller.BaseController;
 import com.cenhai.common.web.domain.Result;
@@ -90,18 +89,8 @@ public class ProfileController extends BaseController {
      * 修改密码用到
      * @return
      */
-    @GetMapping("/getUserAuthInfo/{identityType}")
-    public Result<SysUserAuth> getUserAuthInfo(@PathVariable String identityType){
-        return Result.success(userAuthService.getByUserIdAndIdentityType(SecurityUtils.getUserId(),IdentityType.resolve(identityType)));
-    }
-
-    /**
-     * 获取用户已经设置的所有认证信息
-     * @return
-     */
-    @GetMapping("/listUserAuthInfo")
-    public Result<Map<String,SysUserAuth>> listUserAuthInfo(){
-        Long userId = SecurityUtils.getUserId();
-        return Result.success(userAuthService.listUserAuthInfoByUserId(userId));
+    @GetMapping("/getUserAuthInfo")
+    public Result<SysUserAuth> getUserAuthInfo(){
+        return Result.success(userAuthService.getPasswordTypeByUserId(SecurityUtils.getUserId()));
     }
 }

@@ -1,15 +1,16 @@
 package com.cenhai.framework.security;
 
-import com.cenhai.framework.security.extension.UserDetails;
+import com.cenhai.common.constant.Constants;
 import com.cenhai.system.domain.SysUserAuth;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class DefaultUserDetails implements UserDetails {
+public class SystemUserDetails implements UserDetails {
 
     private List<GrantedAuthority> authorities;
 
@@ -27,59 +28,82 @@ public class DefaultUserDetails implements UserDetails {
 
     private String clientDetails;
 
-    public DefaultUserDetails(){}
+    private String username;
 
-    public DefaultUserDetails(SysUserAuth userAuth, List<String> auths){
-        this.userId = userAuth.getUserId();
+    private SysUserAuth userAuth;
+
+    public SystemUserDetails(SysUserAuth userAuth, List<String> authorities){
+        this.userAuth = userAuth;
         this.password = userAuth.getCredential();
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        for (String key : auths){
-            authorities.add(new SimpleGrantedAuthority(key));
+        this.userId = userAuth.getUserId();
+        this.username = userAuth.getIdentifier();
+        this.authorities = new ArrayList<>();
+        for (String key : authorities){
+            this.authorities.add(new SimpleGrantedAuthority(key));
         }
-        this.authorities = authorities;
+
     }
+
+    public SystemUserDetails(){}
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return this.authorities;
     }
 
     @Override
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
     @Override
+    public String getUsername() {
+        return this.username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return Constants.NORMAL.equals(userAuth.getStatus());
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return Constants.YES.equals(userAuth.getVerified());
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
     public Long getUserId() {
         return userId;
     }
 
-    @Override
     public String getAccessToken() {
         return accessToken;
     }
 
-
-    @Override
     public Long getLoginTime() {
         return loginTime;
     }
 
-    @Override
     public Long getExpireTime() {
         return expireTime;
     }
 
-    @Override
     public String getIpaddr() {
         return ipaddr;
     }
 
-    @Override
     public String getClientDetails() {
         return clientDetails;
     }
-
 
     public void setAuthorities(List<GrantedAuthority> authorities) {
         this.authorities = authorities;
@@ -91,6 +115,10 @@ public class DefaultUserDetails implements UserDetails {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 
     public void setLoginTime(Long loginTime) {
@@ -109,8 +137,7 @@ public class DefaultUserDetails implements UserDetails {
         this.clientDetails = clientDetails;
     }
 
-
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

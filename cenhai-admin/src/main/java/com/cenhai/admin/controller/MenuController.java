@@ -7,6 +7,7 @@ import com.cenhai.system.domain.SysMenu;
 import com.cenhai.system.domain.vo.MenuTree;
 import com.cenhai.system.service.SysMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -24,9 +25,14 @@ public class MenuController extends BaseController {
     @PostMapping("/updateOrSave")
     @Log(title = "菜单管理",info = "更新菜单")
     public Result update(@RequestBody SysMenu menu){
-        if (menuService.saveOrUpdate(menu)){
-            return Result.success(new MenuTree(menu));
+        try {
+            if (menuService.saveOrUpdate(menu)){
+                return Result.success(new MenuTree(menu));
+            }
+        }catch (DuplicateKeyException e){
+            return Result.error("菜单或目录地址已经存在!");
         }
+
         return Result.error("操作失败");
     }
 

@@ -42,13 +42,13 @@ public class TokenService {
      *
      * @return 用户信息
      */
-    public DefaultUserDetails getUserDetails(HttpServletRequest request)
+    public SystemUserDetails getUserDetails(HttpServletRequest request)
     {
         String token = getToken(request);
         if (token != null) {
             Claims claims = parseToken(token);
             String uuid = (String) claims.get("access_token");
-            DefaultUserDetails userDetails = redisCache.getCacheObject(createRedisCacheKey(uuid));
+            SystemUserDetails userDetails = redisCache.getCacheObject(createRedisCacheKey(uuid));
             verifyUserAgent(userDetails,request);
             return userDetails;
         }
@@ -60,7 +60,7 @@ public class TokenService {
      * @param userDetails
      * @param request
      */
-    private void verifyUserAgent(DefaultUserDetails userDetails, HttpServletRequest request){
+    private void verifyUserAgent(SystemUserDetails userDetails, HttpServletRequest request){
         UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent"));
         String clientDetails = userAgent.getOperatingSystem().getName() + "-" + userAgent.getBrowser().getName();
         String ipaddr = IpUtils.getIpAddr(request);
@@ -75,7 +75,7 @@ public class TokenService {
      * @param userDetails 用户信息
      * @return 令牌
      */
-    public String createToken(DefaultUserDetails userDetails)
+    public String createToken(SystemUserDetails userDetails)
     {
         String accessToken = UUID.randomUUID().toString();
         userDetails.setAccessToken(accessToken);
@@ -90,7 +90,7 @@ public class TokenService {
      * 或者user-agent 并设置
      * @param userDetails
      */
-    private void setUserAgent(DefaultUserDetails userDetails){
+    private void setUserAgent(SystemUserDetails userDetails){
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         UserAgent userAgent = UserAgent.parseUserAgentString(attributes.getRequest().getHeader("User-Agent"));
         userDetails.setClientDetails(userAgent.getOperatingSystem().getName() + "-" + userAgent.getBrowser().getName());
@@ -101,7 +101,7 @@ public class TokenService {
      * 验证令牌有效期，如果还有5分钟过期，则自动刷新
      * @param userDetails
      */
-    public void verifyToken(DefaultUserDetails userDetails){
+    public void verifyToken(SystemUserDetails userDetails){
         long exp = userDetails.getExpireTime();
         long now = System.currentTimeMillis();
         if (exp - now <= 5 * 1000){
@@ -126,7 +126,7 @@ public class TokenService {
      * 刷新令牌有效期
      * @param userDetails
      */
-    public void refreshToken(DefaultUserDetails userDetails){
+    public void refreshToken(SystemUserDetails userDetails){
         Long nowTime = System.currentTimeMillis();
         if (userDetails.getLoginTime() == null){
             userDetails.setLoginTime(nowTime);

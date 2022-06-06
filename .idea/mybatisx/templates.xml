@@ -21,6 +21,15 @@
             <option name="moduleUIInfoList">
               <list>
                 <ModuleInfoGo>
+                  <option name="basePath" value="${domain.basePath}" />
+                  <option name="configName" value="mapperInterface" />
+                  <option name="encoding" value="${domain.encoding}" />
+                  <option name="fileName" value="${domain.fileName}Mapper" />
+                  <option name="fileNameWithSuffix" value="${domain.fileName}Mapper.java" />
+                  <option name="modulePath" value="$PROJECT_DIR$/cenhai-system" />
+                  <option name="packageName" value="${domain.basePackage}.mapper" />
+                </ModuleInfoGo>
+                <ModuleInfoGo>
                   <option name="basePath" value="src/main/resources" />
                   <option name="configName" value="mapperXml" />
                   <option name="encoding" value="${domain.encoding}" />
@@ -40,15 +49,6 @@
                 </ModuleInfoGo>
                 <ModuleInfoGo>
                   <option name="basePath" value="${domain.basePath}" />
-                  <option name="configName" value="mapperInterface" />
-                  <option name="encoding" value="${domain.encoding}" />
-                  <option name="fileName" value="${domain.fileName}Mapper" />
-                  <option name="fileNameWithSuffix" value="${domain.fileName}Mapper.java" />
-                  <option name="modulePath" value="$PROJECT_DIR$/cenhai-system" />
-                  <option name="packageName" value="${domain.basePackage}.mapper" />
-                </ModuleInfoGo>
-                <ModuleInfoGo>
-                  <option name="basePath" value="${domain.basePath}" />
                   <option name="configName" value="serviceInterface" />
                   <option name="encoding" value="${domain.encoding}" />
                   <option name="fileName" value="${domain.fileName}Service" />
@@ -64,8 +64,8 @@
             <option name="tableUIInfoList">
               <list>
                 <TableUIInfo>
-                  <option name="className" value="SysSubSystem" />
-                  <option name="tableName" value="sys_sub_system" />
+                  <option name="className" value="SysPlugin" />
+                  <option name="tableName" value="sys_plugin" />
                 </TableUIInfo>
               </list>
             </option>

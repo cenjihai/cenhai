@@ -7,6 +7,19 @@ cenhai:
   #文件路径
   profile: D://home
 
+#插件开发配置
+plugin:
+  # 开启解密校检
+  decrypt:
+    enable: true
+    className: com.gitee.starblues.common.cipher.AesPluginCipher
+    props:
+      secretKey: mmfvXes1XckCi8F/y9i0uQ==
+  runMode: prod
+  mainPackage: com.cenhai
+  pluginPath:
+    - D:\home\plugins
+  backupPath: D:\home\temp
 server:
   port: 8080
 spring:
@@ -14,6 +27,10 @@ spring:
     name: admin
   profiles:
     active: druid
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
 mybatis-plus:
   type-aliases-package: com.cenhai.*.domain
   configuration:

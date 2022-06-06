@@ -14,7 +14,7 @@
             <result property="params" column="params" jdbcType="VARCHAR"/>
             <result property="errMsg" column="err_msg" jdbcType="VARCHAR"/>
             <result property="status" column="status" jdbcType="CHAR"/>
-            <result property="createTime" column="create_time" jdbcType="DATE"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
             <result property="userDetails" column="user_details" jdbcType="VARCHAR"/>
             <result property="action" column="action" jdbcType="VARCHAR"/>
     </resultMap>

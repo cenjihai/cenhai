@@ -1,18 +1,16 @@
 package com.cenhai.framework.security;
 
 import com.cenhai.common.constant.Constants;
-import com.cenhai.common.constant.IdentityType;
 import com.cenhai.common.exception.ServiceException;
 import com.cenhai.common.utils.Base64;
 import com.cenhai.common.utils.StringUtils;
 import com.cenhai.common.web.domain.Result;
 import com.cenhai.framework.annotation.Log;
-import com.cenhai.framework.security.extension.GenericAuthenticationToken;
 import com.cenhai.plugs.redis.service.RedisCache;
 import com.google.code.kaptcha.Producer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FastByteArrayOutputStream;
@@ -48,9 +46,8 @@ public class TokenEndpoint {
     @Log(title = "登录日志", info = "系统登录入口")
     public Object authenticate(@RequestBody Map<String,String> principal){
         validateCaptcha(principal.get("code"), principal.get("uuid"));
-        IdentityType identityType = IdentityType.resolve(principal.get("identity_type"));
-        Authentication authentication = new GenericAuthenticationToken(principal.get("username"),principal.get("password"),identityType);
-        return Result.success(createSuccessResult(authenticationManager.authenticate(authentication),identityType.getValue()));
+        Authentication authentication = new UsernamePasswordAuthenticationToken(principal.get("username"),principal.get("password"));
+        return Result.success(createSuccessResult(authenticationManager.authenticate(authentication),Constants.DEFAULT_SECURITY_IDENTITY_TYPE));
     }
 
     @GetMapping("/captcha")
@@ -87,7 +84,7 @@ public class TokenEndpoint {
     }
 
     private Map<String,String> createSuccessResult(Authentication authentication,String identityType){
-        DefaultUserDetails userDetails = (DefaultUserDetails) authentication.getDetails();
+        SystemUserDetails userDetails = (SystemUserDetails) authentication.getPrincipal();
         String token = tokenService.createToken(userDetails);
         Map<String,String> result = new HashMap<>();
         result.put("access_token",token);

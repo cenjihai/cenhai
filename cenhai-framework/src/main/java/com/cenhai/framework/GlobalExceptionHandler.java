@@ -5,6 +5,7 @@ import com.cenhai.common.web.domain.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -30,19 +31,25 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     public Result badCredentialsException(BadCredentialsException e){
         e.printStackTrace();
-        return Result.error(e.getMessage());
+        return Result.error("账号或密码错误");
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
     public Result usernameNotFoundException(UsernameNotFoundException e){
         e.printStackTrace();
-        return Result.error(e.getMessage());
+        return Result.error("账号或密码错误");
     }
 
     @ExceptionHandler(LockedException.class)
     public Result lockedException(LockedException e){
         e.printStackTrace();
-        return Result.error(e.getMessage());
+        return Result.error("用户已锁定");
+    }
+
+    @ExceptionHandler(CredentialsExpiredException.class)
+    public Result credentialsExpiredException(CredentialsExpiredException e){
+        e.printStackTrace();
+        return Result.error("用户账号未验证");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

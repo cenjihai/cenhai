@@ -2,10 +2,7 @@ package com.cenhai.system.mapper;
 
 import com.cenhai.system.domain.SysUserAuth;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Param;
 
-import java.util.Collection;
-import java.util.List;
 
 /**
 * @author a
@@ -15,11 +12,6 @@ import java.util.List;
 */
 public interface SysUserAuthMapper extends BaseMapper<SysUserAuth> {
 
-    SysUserAuth getByUserIdAndIdentityType(@Param("userId")Long userId, @Param("identityType") String identityType);
-
-    List<SysUserAuth> listByUserId(@Param("userId") Long userId);
-
-    int batchDeleteByUserIds(Collection<Long> ids);
 }
 
 
