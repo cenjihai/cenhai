@@ -68,7 +68,7 @@ public class PluginController extends BaseController {
     }
 
     /**
-     * 安装插件
+     * 上传并安装插件
      * @param multipartFile
      * @return
      */
@@ -102,7 +102,6 @@ public class PluginController extends BaseController {
         }
     }
 
-
     /**
      * 更新插件状态
      * @param plugin
@@ -122,5 +121,6 @@ public class PluginController extends BaseController {
             return Result.error(e.getMessage());
         }
     }
+
 
 }

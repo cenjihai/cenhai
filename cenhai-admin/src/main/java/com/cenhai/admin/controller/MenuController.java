@@ -1,15 +1,17 @@
 package com.cenhai.admin.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cenhai.common.web.controller.BaseController;
 import com.cenhai.common.web.domain.Result;
 import com.cenhai.framework.annotation.Log;
 import com.cenhai.system.domain.SysMenu;
-import com.cenhai.system.domain.vo.MenuTree;
+import com.cenhai.system.domain.vo.MenuTreeTable;
 import com.cenhai.system.service.SysMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -21,29 +23,29 @@ public class MenuController extends BaseController {
     @Autowired
     private SysMenuService menuService;
 
+    /**
+     * 返回菜单列表
+     * @param menu
+     * @return
+     */
+    @GetMapping("/list")
+    public Result<List<MenuTreeTable>> list(SysMenu menu){
+        List<SysMenu> menus = menuService.list(new QueryWrapper<>(menu));
+        List<MenuTreeTable> menuTreeTables = new ArrayList<>();
+        for (SysMenu m: menus){
+            menuTreeTables.add(new MenuTreeTable(m));
+        }
+        return Result.success(menuTreeTables);
+    }
 
     @PostMapping("/updateOrSave")
     @Log(title = "菜单管理",info = "更新菜单")
     public Result update(@RequestBody SysMenu menu){
         try {
-            if (menuService.saveOrUpdate(menu)){
-                return Result.success(new MenuTree(menu));
-            }
+            return Result.result(menuService.saveOrUpdate(menu));
         }catch (DuplicateKeyException e){
             return Result.error("菜单或目录地址已经存在!");
         }
-
-        return Result.error("操作失败");
-    }
-
-    /**
-     * 懒加载菜单树接口
-     * @param parentId
-     * @return
-     */
-    @GetMapping("/menuTree/{parentId}")
-    public Result<List<MenuTree>> menuTree(@PathVariable Long parentId){
-        return Result.success(menuService.listMenuTree(parentId));
     }
 
     @PostMapping("/delete/{menuId}")

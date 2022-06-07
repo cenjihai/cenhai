@@ -7,6 +7,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 树形菜单结构，在分配菜单使用
+ */
 @Data
 public class MenuTree implements Serializable {
 

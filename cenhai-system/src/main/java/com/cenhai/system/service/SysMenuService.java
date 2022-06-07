@@ -38,13 +38,6 @@ public interface SysMenuService extends IService<SysMenu> {
     boolean deleteMenuByMenuId(Long menuId);
 
     /**
-     * 返回后台菜单管理需要的树形结构
-     * @param parentId
-     * @return
-     */
-    List<MenuTree> listMenuTree(Long parentId);
-
-    /**
      * 返回选中和全部的菜单
      * @param roleId
      * @return

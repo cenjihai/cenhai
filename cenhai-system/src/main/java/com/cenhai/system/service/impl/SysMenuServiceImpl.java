@@ -85,21 +85,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu>
     }
 
     /**
-     * 返回后台菜单管理需要的树形结构
-     *
-     * @return
-     */
-    @Override
-    public List<MenuTree> listMenuTree(Long parentId) {
-        List<SysMenu> menus = list(new QueryWrapper<SysMenu>()
-                .orderByAsc("menu_order")
-                .eq("parent_menu_id",parentId)
-        );
-        List<MenuTree> menuTrees = MenuTree.toMenuTree(menus);
-        return menuTrees;
-    }
-
-    /**
      * 返回选中和全部的菜单
      *
      * @param roleId
