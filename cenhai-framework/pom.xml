@@ -30,7 +30,7 @@
         </dependency>
         <dependency>
             <groupId>com.cenhai</groupId>
-            <artifactId>cenhai-plugs-redis</artifactId>
+            <artifactId>cenhai-support-redis</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>

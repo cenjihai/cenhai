@@ -1,4 +1,4 @@
-package com.cenhai.system.domain.dto;
+package com.cenhai.system.param;
 
 import lombok.Data;
 
@@ -9,7 +9,7 @@ import java.io.Serializable;
  * 用户自行更新密码认证方式
  */
 @Data
-public class SimplePasswordForm implements Serializable {
+public class SimpleUpdatePasswordParam implements Serializable {
 
     private Long userId;
 

@@ -2,7 +2,7 @@ package com.cenhai.system.service;
 
 import com.cenhai.system.domain.SysOperlog;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.cenhai.system.domain.dto.OperlogQueryForm;
+import com.cenhai.system.param.OperlogQueryParam;
 
 import java.util.List;
 
@@ -13,5 +13,10 @@ import java.util.List;
 */
 public interface SysOperlogService extends IService<SysOperlog> {
 
-    List<SysOperlog> listOperlog(OperlogQueryForm queryForm);
+    /**
+     * 查询
+     * @param param
+     * @return
+     */
+    List<SysOperlog> listOperlog(OperlogQueryParam param);
 }

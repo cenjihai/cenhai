@@ -1,5 +1,6 @@
 package com.cenhai.admin.event;
 
+import com.cenhai.common.constant.Constants;
 import com.cenhai.system.service.SysPluginService;
 import com.gitee.starblues.core.PluginInfo;
 import com.gitee.starblues.integration.listener.PluginListener;
@@ -31,7 +32,7 @@ public class DefaultPluginListener implements PluginListener {
     @Override
     public void unLoadSuccess(PluginInfo pluginInfo) {
         log.info("插件[{}]卸载成功", pluginInfo.getPluginId());
-        pluginService.uninstall(pluginInfo.getPluginId());
+        pluginService.removeById(pluginInfo.getPluginId());
     }
 
     @Override
@@ -42,19 +43,19 @@ public class DefaultPluginListener implements PluginListener {
     @Override
     public void startSuccess(PluginInfo pluginInfo) {
         log.info("插件[{}]启动成功", pluginInfo.getPluginId());
-        pluginService.start(pluginInfo.getPluginId());
+        pluginService.changeStatus(pluginInfo.getPluginId(), Constants.NORMAL);
     }
 
     @Override
     public void startFailure(PluginInfo pluginInfo, Throwable throwable) {
         log.info("插件[{}]启动失败. {}", pluginInfo.getPluginId(), throwable.getMessage());
-        pluginService.stop(pluginInfo.getPluginId());
+        pluginService.changeStatus(pluginInfo.getPluginId(), Constants.DISABLE);
     }
 
     @Override
     public void stopSuccess(PluginInfo pluginInfo) {
         log.info("插件[{}]停止成功", pluginInfo.getPluginId());
-        pluginService.stop(pluginInfo.getPluginId());
+        pluginService.changeStatus(pluginInfo.getPluginId(), Constants.DISABLE);
     }
 
     @Override

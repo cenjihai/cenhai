@@ -1,6 +1,5 @@
-package com.cenhai.system.domain.dto;
+package com.cenhai.system.param;
 
-import com.cenhai.common.utils.StringUtils;
 import com.cenhai.system.domain.SysUser;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -9,18 +8,13 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
-/**
- * 简单的添加用户表单
- */
 @Data
-public class SimpleUserForm implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class SimpleUserParam implements Serializable {
 
     private Long userId;
 
     @NotBlank(message = "昵称不能为空")
-    @Length(max = 16, min = 3,message = "昵称格式不正确")
+    @Length(max = 16, min = 2,message = "昵称格式不正确")
     private String nickname;
 
     @Pattern(regexp = "[0|1|2]",message = "性别错误")
@@ -37,7 +31,7 @@ public class SimpleUserForm implements Serializable {
 
     private String headimgurl;
 
-    public SysUser toUser(String defaultHeadimgurl){
+    public SysUser toSysUser(){
         SysUser user = new SysUser();
         user.setNickname(this.nickname);
         user.setSex(this.sex);
@@ -45,8 +39,6 @@ public class SimpleUserForm implements Serializable {
         user.setProvince(this.province);
         user.setCity(this.city);
         user.setRemark(this.remark);
-        if (StringUtils.isNull(this.headimgurl))
-            this.headimgurl = defaultHeadimgurl;
         user.setHeadimgurl(this.headimgurl);
         user.setUserId(this.userId);
         return user;

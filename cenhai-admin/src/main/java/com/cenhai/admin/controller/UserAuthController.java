@@ -34,6 +34,6 @@ public class UserAuthController extends BaseController {
     @PostMapping("/updateOrSaveUserAuthByPassword")
     @Log(title = "账号管理",info = "更新或设置用户账号和密码")
     public Result updateOrSaveUserAuthByPassword(@RequestBody SysUserAuth userAuth){
-        return Result.result(userAuthService.updateOrSaveUserAuthByPassword(userAuth));
+        return Result.result(userAuthService.saveOrUpdateUserAuthByPassword(userAuth));
     }
 }

@@ -2,7 +2,7 @@ package com.cenhai.system.mapper;
 
 import com.cenhai.system.domain.SysUser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.cenhai.system.domain.dto.UserQueryForm;
+import com.cenhai.system.param.UserQueryParam;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
 */
 public interface SysUserMapper extends BaseMapper<SysUser> {
 
-    List<SysUser> listUserAndUserAuth(UserQueryForm form);
+    List<SysUser> listUser(UserQueryParam param);
 }
 
 

@@ -33,19 +33,22 @@
         left join sys_user_role ur on ur.role_id = rm.role_id
         left join sys_role r on r.role_id = ur.role_id
         where ur.user_id = #{userId} and r.status = '0'
-        and m.status = '0' and m.type in ('M','C')
+        and m.status = '0' and m.type in ('M','C') and m.deleted = '0'
         order by m.menu_order asc
     </select>
 
     <select id="listMenuIdByRoleId" resultType="Long" parameterType="Long">
         select m.menu_id from sys_menu m
         left join sys_role_menu rm on m.menu_id = rm.menu_id
-        where rm.role_id = #{roleId} and m.status = '0' order by m.menu_order asc
+        where rm.role_id = #{roleId} and m.deleted = '0' and m.status = '0' order by m.menu_order asc
     </select>
 
-    <select id="listPermKeyByRoleId" parameterType="long" resultType="string">
-        select m.perm_key from sys_menu m
-        left join sys_role_menu rm on rm.menu_id = m.menu_id
-        where m.status = '0' and m.type = 'P' and rm.role_id = #{roleId}
+    <select id="listMenuPermByUserId" resultType="string" parameterType="long">
+        select DISTINCT m.* from sys_menu m
+        left join sys_role_menu rm on m.menu_id = rm.menu_id
+        left join sys_user_role ur on ur.role_id = rm.role_id
+        left join sys_role r on r.role_id = ur.role_id
+        where ur.user_id = #{userId} and r.status = '0'
+          and m.status = '0' and m.type ='P' and m.deleted = '0'
     </select>
 </mapper>

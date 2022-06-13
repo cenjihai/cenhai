@@ -42,7 +42,10 @@ public class MenuController extends BaseController {
     @Log(title = "菜单管理",info = "更新菜单")
     public Result update(@RequestBody SysMenu menu){
         try {
-            return Result.result(menuService.saveOrUpdate(menu));
+            if (menuService.saveOrUpdate(menu)){
+                return Result.success(new MenuTreeTable(menu));
+            }
+            return Result.result(false);
         }catch (DuplicateKeyException e){
             return Result.error("菜单或目录地址已经存在!");
         }

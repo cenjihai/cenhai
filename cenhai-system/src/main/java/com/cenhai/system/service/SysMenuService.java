@@ -2,7 +2,6 @@ package com.cenhai.system.service;
 
 import com.cenhai.system.domain.SysMenu;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.cenhai.system.domain.vo.MenuTree;
 import com.cenhai.system.domain.vo.VueRoute;
 
 import java.util.Collection;
@@ -17,11 +16,11 @@ import java.util.Map;
 public interface SysMenuService extends IService<SysMenu> {
 
     /**
-     * 根据权限id查询菜单，有缓存
-     * @param roleId
+     * 查询menuPerm
+     * @param userId
      * @return
      */
-    List<String> listPermKeyByRoleId(Long roleId);
+    List<String> listMenuPermByUserId(Long userId);
 
     /**
      * 根据用户id，列出路由

@@ -1,7 +1,7 @@
 package com.cenhai.framework.config;
 
 import com.alibaba.fastjson.JSON;
-import com.cenhai.common.constant.ResultStatus;
+import com.cenhai.common.enums.ResultStatus;
 import com.cenhai.common.web.domain.Result;
 import com.cenhai.framework.security.filter.JwtAuthenticationTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,7 +2,7 @@ package com.cenhai.system.mapper;
 
 import com.cenhai.system.domain.SysPlugin;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.cenhai.system.domain.dto.PluginQueryForm;
+import com.cenhai.system.param.PluginQueryParam;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
 */
 public interface SysPluginMapper extends BaseMapper<SysPlugin> {
 
-    List<SysPlugin> listPlugin(PluginQueryForm queryForm);
+    List<SysPlugin> listPlugin(PluginQueryParam param);
 
 }
 

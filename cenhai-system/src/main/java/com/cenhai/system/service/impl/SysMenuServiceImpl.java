@@ -1,6 +1,6 @@
 package com.cenhai.system.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cenhai.common.exception.ServiceException;
 import com.cenhai.common.utils.StringUtils;
@@ -13,7 +13,6 @@ import com.cenhai.system.mapper.SysMenuMapper;
 import com.cenhai.system.service.SysRoleMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,23 +31,15 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu>
     private SysRoleMenuService roleMenuService;
 
 
-
-    @Override
-    @CacheEvict(value = "role_permKey", allEntries = true)
-    public boolean saveOrUpdate(SysMenu entity) {
-        return super.saveOrUpdate(entity);
-    }
-
     /**
-     * 根据权限id查询菜单，有缓存
+     * 查询menuPerm
      *
-     * @param roleId
+     * @param userId
      * @return
      */
     @Override
-    @Cacheable(value = "role_permKey",key = "#roleId")
-    public List<String> listPermKeyByRoleId(Long roleId) {
-        return baseMapper.listPermKeyByRoleId(roleId);
+    public List<String> listMenuPermByUserId(Long userId) {
+        return baseMapper.listMenuPermByUserId(userId);
     }
 
     /**
@@ -77,9 +68,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu>
     @Override
     @CacheEvict(value = "role_permKey", allEntries = true)
     public boolean deleteMenuByMenuId(Long menuId) {
-        QueryWrapper<SysMenu> wrapper = new QueryWrapper();
-        wrapper.eq("parent_menu_id",menuId);
-        long count = count(wrapper);
+        long count = count(new LambdaQueryWrapper<SysMenu>()
+                .eq(SysMenu::getParentMenuId,menuId));
         if (count > 0)throw new ServiceException("请先删除当前项的子项");
         return removeById(menuId);
     }
@@ -94,8 +84,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu>
     public Map<String, Object> listSelectedAndAllMenuByRoleId(Long roleId) {
         Map<String,Object> result = new HashMap<>();
         result.put("selected",baseMapper.listMenuIdByRoleId(roleId));
-        List<SysMenu> menus = list(new QueryWrapper<SysMenu>()
-                .orderByDesc("menu_order")
+        List<SysMenu> menus = list(new LambdaQueryWrapper<SysMenu>()
+                .orderByDesc(SysMenu::getMenuOrder)
         );
         result.put("all", MenuTree.toTree(menus));
         return result;
@@ -112,7 +102,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu>
     @Transactional
     @CacheEvict(value = "role_permKey", allEntries = true)
     public boolean assignToRoleByRoleId(Long roleId, Collection<Long> menuIds) {
-        roleMenuService.remove(new QueryWrapper<SysRoleMenu>().eq("role_id",roleId));
+        roleMenuService.remove(new LambdaQueryWrapper<SysRoleMenu>().eq(SysRoleMenu::getRoleId,roleId));
         if (StringUtils.isEmpty(menuIds))return true;
         List<SysRoleMenu> roleMenus = new ArrayList<>();
         for (Long id: menuIds){

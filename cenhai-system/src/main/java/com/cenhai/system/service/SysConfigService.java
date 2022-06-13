@@ -2,7 +2,7 @@ package com.cenhai.system.service;
 
 import com.cenhai.system.domain.SysConfig;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.cenhai.system.domain.dto.SimpleConfigForm;
+import com.cenhai.system.param.SimpleUpdateConfigParam;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public interface SysConfigService extends IService<SysConfig> {
      * @param configForms
      * @return
      */
-    boolean batchUpdateByAdmin(List<SimpleConfigForm> configForms);
+    boolean batchUpdateByAdmin(List<SimpleUpdateConfigParam> configForms);
 
     /**
      * 获取一个配置信息。有缓存

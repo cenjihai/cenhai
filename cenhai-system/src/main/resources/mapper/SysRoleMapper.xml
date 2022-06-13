@@ -24,13 +24,7 @@
         where ur.user_id = #{userId}
     </select>
 
-    <select id="listRoleIdAndRoleKeyByUserId" parameterType="Long" resultMap="BaseResultMap">
-        select r.role_id, r.role_key from sys_role r
-        left join sys_user_role ur on ur.role_id = r.role_id
-        where ur.user_id = #{userId} and r.status = '0'
-    </select>
-
-    <select id="listRole" resultMap="BaseResultMap" parameterType="com.cenhai.system.domain.dto.RoleQueryForm">
+    <select id="listRole" resultMap="BaseResultMap" parameterType="com.cenhai.system.param.RoleQueryParam">
         select * from sys_role where 1 = 1
         <if test="startTime != null and startTime != ''"><!-- 开始时间检索 -->
             and date_format(create_time,'%y%m%d') &gt;= date_format(#{startTime},'%y%m%d')
@@ -49,9 +43,4 @@
         </if>
     </select>
 
-    <select id="listRoleByPermId" resultMap="BaseResultMap" parameterType="Long">
-        select r.* from sys_role r
-        left join sys_role_permission rp on r.role_id = rp.role_id
-        where rp.perm_id = #{permId} order by create_time desc
-    </select>
 </mapper>

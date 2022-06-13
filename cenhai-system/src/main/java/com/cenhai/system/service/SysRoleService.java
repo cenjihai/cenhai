@@ -2,10 +2,9 @@ package com.cenhai.system.service;
 
 import com.cenhai.system.domain.SysRole;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.cenhai.system.domain.dto.RoleQueryForm;
+import com.cenhai.system.param.RoleQueryParam;
 
 import java.util.List;
-import java.util.Map;
 
 /**
 * @author a
@@ -21,13 +20,10 @@ public interface SysRoleService extends IService<SysRole> {
      */
     List<SysRole> listByUserId(Long userId);
 
-
-    List<SysRole> listRole(RoleQueryForm form);
-
     /**
-     * 查询角色ID和角色Key
-     * @param userId
+     * 查询角色列表
+     * @param param
      * @return
      */
-    List<SysRole> listRoleIdAndRoleKeyByUserId(Long userId);
+    List<SysRole> listRole(RoleQueryParam param);
 }

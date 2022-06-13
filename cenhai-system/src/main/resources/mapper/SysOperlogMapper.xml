@@ -26,7 +26,7 @@
         create_time,user_details,action
     </sql>
 
-    <select id="listOperlog" resultMap="BaseResultMap" parameterType="com.cenhai.system.domain.dto.OperlogQueryForm">
+    <select id="listOperlog" resultMap="BaseResultMap" parameterType="com.cenhai.system.param.OperlogQueryParam">
         select oper_id,user_id,title,
         info,oper_ip,oper_url,status,
         create_time,user_details from sys_operlog where 1 = 1

@@ -1,4 +1,4 @@
-package com.cenhai.plugs.redis.config;
+package com.cenhai.support.redis.config;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.ParserConfig;

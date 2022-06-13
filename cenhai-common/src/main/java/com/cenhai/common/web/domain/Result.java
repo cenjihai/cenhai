@@ -1,7 +1,7 @@
 package com.cenhai.common.web.domain;
 
 
-import com.cenhai.common.constant.ResultStatus;
+import com.cenhai.common.enums.ResultStatus;
 import lombok.Getter;
 import lombok.Setter;
 

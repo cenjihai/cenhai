@@ -1,16 +1,13 @@
 package com.cenhai.system.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cenhai.system.domain.SysRole;
-import com.cenhai.system.domain.dto.RoleQueryForm;
+import com.cenhai.system.param.RoleQueryParam;
 import com.cenhai.system.service.SysRoleService;
 import com.cenhai.system.mapper.SysRoleMapper;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 /**
 * @author a
@@ -21,27 +18,27 @@ import java.util.Map;
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole>
     implements SysRoleService{
 
-    @Override
-    public List<SysRole> listByUserId(Long userId) {
-        return baseMapper.listByUserId(userId);
-    }
-
-    @Override
-    public List<SysRole> listRole(RoleQueryForm form) {
-        return baseMapper.listRole(form);
-    }
-
     /**
-     * 查询角色ID和角色Key
+     * 查询指定用户拥有的角色
      *
      * @param userId
      * @return
      */
     @Override
-    public List<SysRole> listRoleIdAndRoleKeyByUserId(Long userId) {
-        return baseMapper.listRoleIdAndRoleKeyByUserId(userId);
+    public List<SysRole> listByUserId(Long userId) {
+        return baseMapper.listByUserId(userId);
     }
 
+    /**
+     * 查询角色列表
+     *
+     * @param param
+     * @return
+     */
+    @Override
+    public List<SysRole> listRole(RoleQueryParam param) {
+        return baseMapper.listRole(param);
+    }
 }
 
 

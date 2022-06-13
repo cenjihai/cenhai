@@ -8,7 +8,7 @@ import com.cenhai.common.web.controller.BaseController;
 import com.cenhai.common.web.domain.Result;
 import com.cenhai.framework.annotation.Log;
 import com.cenhai.system.domain.SysRole;
-import com.cenhai.system.domain.dto.RoleQueryForm;
+import com.cenhai.system.param.RoleQueryParam;
 import com.cenhai.system.service.SysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -41,7 +41,7 @@ public class RoleController extends BaseController {
     }
 
     @GetMapping("/list")
-    public Result<TableDataInfo> list(RoleQueryForm form){
+    public Result<TableDataInfo> list(RoleQueryParam form){
         PageUtils.startPage();
         return Result.success(PageUtils.getDataTable(roleService.listRole(form)));
     }

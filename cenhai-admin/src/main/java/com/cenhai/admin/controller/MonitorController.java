@@ -6,7 +6,7 @@ import com.cenhai.common.web.controller.BaseController;
 import com.cenhai.common.web.domain.Result;
 import com.cenhai.framework.annotation.Log;
 import com.cenhai.system.domain.SysOperlog;
-import com.cenhai.system.domain.dto.OperlogQueryForm;
+import com.cenhai.system.param.OperlogQueryParam;
 import com.cenhai.system.service.SysOperlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,13 +25,13 @@ public class MonitorController extends BaseController {
 
     /**
      * 查询
-     * @param queryForm
+     * @param param
      * @return
      */
     @GetMapping("/operlog/list")
-    public Result<TableDataInfo> listOperlog (OperlogQueryForm queryForm){
+    public Result<TableDataInfo> listOperlog (OperlogQueryParam param){
         PageUtils.startPage();
-        return Result.success(PageUtils.getDataTable(operlogService.listOperlog(queryForm)));
+        return Result.success(PageUtils.getDataTable(operlogService.listOperlog(param)));
     }
 
     /**

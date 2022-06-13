@@ -1,14 +1,15 @@
 package com.cenhai.admin.controller;
 
 import com.cenhai.common.utils.HeadimgUtils;
+import com.cenhai.common.utils.StringUtils;
 import com.cenhai.common.web.controller.BaseController;
 import com.cenhai.common.web.domain.Result;
 import com.cenhai.framework.annotation.Log;
 import com.cenhai.framework.config.ServerConfig;
 import com.cenhai.framework.security.SecurityUtils;
 import com.cenhai.system.domain.SysUserAuth;
-import com.cenhai.system.domain.dto.SimplePasswordForm;
-import com.cenhai.system.domain.dto.SimpleUserForm;
+import com.cenhai.system.param.SimpleUpdatePasswordParam;
+import com.cenhai.system.param.SimpleUserParam;
 import com.cenhai.system.service.SysConfigService;
 import com.cenhai.system.service.SysUserAuthService;
 import com.cenhai.system.service.SysUserService;
@@ -54,34 +55,36 @@ public class ProfileController extends BaseController {
 
     /**
      * 更新个人信息
-     * @param userForm
+     * @param param
      * @return
      */
     @PostMapping("/update")
     @Log(title = "个人信息",info = "更新个人信息")
-    public Result update(@RequestBody @Valid SimpleUserForm userForm){
-        userForm.setUserId(SecurityUtils.getUserId());
+    public Result update(@RequestBody @Valid SimpleUserParam param){
+        param.setUserId(SecurityUtils.getUserId());
         //不允许用户自己更新备注信息
-        userForm.setRemark(null);
+        param.setRemark(null);
         //判断头像处理
-        if (userForm.getHeadimgurl().length() >= 255){
-            userForm.setHeadimgurl(HeadimgUtils.saveBase64ToLocalImage(userForm.getHeadimgurl(),serverConfig.getUrl()));
+        String defaultHeadimgurl = configService.getConfigValue("default-headimg").toString();
+        if (!StringUtils.ishttp(param.getHeadimgurl()) && !param.getHeadimgurl().equals(defaultHeadimgurl)){
+            param.setHeadimgurl(HeadimgUtils.saveBase64ToLocalImage(param.getHeadimgurl(),serverConfig.getUrl()));
         }
-        return Result.result(userService.updateById(userForm.toUser(configService.getConfigValue("default-headimg").toString())));
+        if (StringUtils.isNull(param.getHeadimgurl()))param.setHeadimgurl(defaultHeadimgurl);
+        return Result.result(userService.updateById(param.toSysUser()));
     }
 
     /**
      * 更新密码认证方式
      * 就是修改密码
-     * @param form
+     * @param param
      * @return
      */
     @PostMapping("/updateUserAuthByPassword")
     @Log(title = "个人信息",info = "修改密码")
-    public Result updateUserAuthByPassword(@RequestBody @Valid SimplePasswordForm form){
+    public Result updateUserAuthByPassword(@RequestBody @Valid SimpleUpdatePasswordParam param){
         Long userId = SecurityUtils.getUserId();
-        form.setUserId(userId);
-        return Result.success(userAuthService.updateUserAuthByPasswordAndUserId(form));
+        param.setUserId(userId);
+        return Result.success(userAuthService.updatePasswordByUserId(param));
     }
 
     /**

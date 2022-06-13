@@ -23,7 +23,7 @@
     </sql>
 
 
-    <select id="listPlugin" resultMap="BaseResultMap" parameterType="com.cenhai.system.domain.dto.PluginQueryForm">
+    <select id="listPlugin" resultMap="BaseResultMap" parameterType="com.cenhai.system.param.PluginQueryParam">
         select * from sys_plugin where 1 = 1
         <if test="pluginId != null and pluginId !=''">
             and plugin_id = #{pluginId}

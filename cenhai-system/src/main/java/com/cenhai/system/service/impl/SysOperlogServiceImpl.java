@@ -2,7 +2,7 @@ package com.cenhai.system.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cenhai.system.domain.SysOperlog;
-import com.cenhai.system.domain.dto.OperlogQueryForm;
+import com.cenhai.system.param.OperlogQueryParam;
 import com.cenhai.system.service.SysOperlogService;
 import com.cenhai.system.mapper.SysOperlogMapper;
 import org.springframework.stereotype.Service;
@@ -18,9 +18,14 @@ import java.util.List;
 public class SysOperlogServiceImpl extends ServiceImpl<SysOperlogMapper, SysOperlog>
     implements SysOperlogService{
 
+    /**
+     * 查询
+     * @param param
+     * @return
+     */
     @Override
-    public List<SysOperlog> listOperlog(OperlogQueryForm queryForm) {
-        return baseMapper.listOperlog(queryForm);
+    public List<SysOperlog> listOperlog(OperlogQueryParam param) {
+        return baseMapper.listOperlog(param);
     }
 }
 

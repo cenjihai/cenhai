@@ -1,4 +1,4 @@
-package com.cenhai.plugs.redis.config;
+package com.cenhai.support.redis.config;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

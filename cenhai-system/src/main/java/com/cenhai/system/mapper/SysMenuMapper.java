@@ -4,7 +4,6 @@ import com.cenhai.system.domain.SysMenu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -19,7 +18,7 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
 
     List<Long> listMenuIdByRoleId(@Param("roleId") Long roleId);
 
-    List<String> listPermKeyByRoleId(Long roleId);
+    List<String> listMenuPermByUserId(@Param("userId")Long userId);
 }
 
 

@@ -7,7 +7,7 @@ import com.cenhai.common.web.domain.Result;
 import com.cenhai.framework.annotation.Log;
 import com.cenhai.system.domain.SysConfig;
 import com.cenhai.system.domain.SysConfigGroup;
-import com.cenhai.system.domain.dto.SimpleConfigForm;
+import com.cenhai.system.param.SimpleUpdateConfigParam;
 import com.cenhai.system.service.SysConfigGroupService;
 import com.cenhai.system.service.SysConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +56,7 @@ public class ConfigController extends BaseController {
      */
     @PostMapping("/batchUpdate")
     @Log(title = "配置管理",info = "更新配置")
-    public Result batchUpdate(@RequestBody List<SimpleConfigForm> configForms){
+    public Result batchUpdate(@RequestBody List<SimpleUpdateConfigParam> configForms){
         return Result.result(configService.batchUpdateByAdmin(configForms));
     }
 }

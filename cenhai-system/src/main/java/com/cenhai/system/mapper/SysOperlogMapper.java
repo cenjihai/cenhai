@@ -2,7 +2,7 @@ package com.cenhai.system.mapper;
 
 import com.cenhai.system.domain.SysOperlog;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.cenhai.system.domain.dto.OperlogQueryForm;
+import com.cenhai.system.param.OperlogQueryParam;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
 */
 public interface SysOperlogMapper extends BaseMapper<SysOperlog> {
 
-    List<SysOperlog> listOperlog(OperlogQueryForm form);
+    List<SysOperlog> listOperlog(OperlogQueryParam param);
 }
 
 

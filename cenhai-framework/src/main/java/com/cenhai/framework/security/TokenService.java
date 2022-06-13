@@ -1,7 +1,7 @@
 package com.cenhai.framework.security;
 
 import com.cenhai.common.utils.IpUtils;
-import com.cenhai.plugs.redis.service.RedisCache;
+import com.cenhai.support.redis.service.RedisCache;
 import eu.bitwalker.useragentutils.UserAgent;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

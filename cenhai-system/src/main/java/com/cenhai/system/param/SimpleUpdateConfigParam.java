@@ -1,11 +1,11 @@
-package com.cenhai.system.domain.dto;
+package com.cenhai.system.param;
 
 import lombok.Data;
 
 import java.io.Serializable;
 
 @Data
-public class SimpleConfigForm implements Serializable {
+public class SimpleUpdateConfigParam implements Serializable {
 
     private Long configId;
 

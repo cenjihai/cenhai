@@ -75,6 +75,12 @@ public class SysUser implements Serializable {
      */
     private String remark;
 
+    /**
+     * 逻辑删除
+     */
+    @TableLogic
+    private Integer deleted;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

@@ -5,7 +5,7 @@ cenhai:
   #版本
   version: 1.0
   #文件路径
-  profile: /home/resource
+  profile: /Users/cenjihai/temp
 
 #插件开发配置
 plugin:
@@ -18,8 +18,8 @@ plugin:
   runMode: prod
   mainPackage: com.cenhai
   pluginPath:
-    - /home/resource/plugins
-  backupPath: /home/resource/backup
+    - /Users/cenjihai/temp/plugins
+  backupPath: /Users/cenjihai/temp/backup
 server:
   port: 8080
 spring:
@@ -38,7 +38,11 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     local-cache-scope: session
-
+  global-config:
+    db-config:
+      logic-not-delete-value: 0
+      logic-delete-value: 1
+      logic-delete-field: deleted
 token:
   header: Authorization
   secret: dasd12s3ad1a23

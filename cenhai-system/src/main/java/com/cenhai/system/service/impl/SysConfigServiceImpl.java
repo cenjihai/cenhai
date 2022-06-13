@@ -1,11 +1,12 @@
 package com.cenhai.system.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cenhai.common.constant.Constants;
+import com.cenhai.common.utils.StringUtils;
 import com.cenhai.system.domain.SysConfig;
-import com.cenhai.system.domain.dto.SimpleConfigForm;
+import com.cenhai.system.param.SimpleUpdateConfigParam;
 import com.cenhai.system.service.SysConfigService;
 import com.cenhai.system.mapper.SysConfigMapper;
 import org.springframework.cache.annotation.CacheEvict;
@@ -35,9 +36,9 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     @Override
     @Transactional
     @CacheEvict(value = "config", allEntries = true)
-    public boolean batchUpdateByAdmin(List<SimpleConfigForm> configForms) {
+    public boolean batchUpdateByAdmin(List<SimpleUpdateConfigParam> configForms) {
         List<SysConfig> configs = new ArrayList<>();
-        for (SimpleConfigForm form : configForms){
+        for (SimpleUpdateConfigParam form : configForms){
             SysConfig config = new SysConfig();
             config.setConfigId(form.getConfigId());
             if (form.getWidget().equals("checkbox")){
@@ -59,9 +60,10 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     @Override
     @Cacheable(value = "config", key = "#configKey")
     public Object getConfigValue(String configKey) {
-        SysConfig config = getOne(new QueryWrapper<SysConfig>()
-                .eq("status", Constants.NORMAL)
-                .eq("config_key",configKey));
+        SysConfig config = getOne(new LambdaQueryWrapper<SysConfig>()
+                .eq(SysConfig::getStatus, Constants.NORMAL)
+                .eq(SysConfig::getConfigValue,configKey));
+        if (StringUtils.isNull(config))return null;
         return config.getConfigValue();
     }
 }

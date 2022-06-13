@@ -25,12 +25,12 @@
         city
     </sql>
 
-    <select id="listUserAndUserAuth" resultMap="BaseResultMap" parameterType="com.cenhai.system.domain.dto.UserQueryForm">
+    <select id="listUser" resultMap="BaseResultMap" parameterType="com.cenhai.system.param.UserQueryParam">
         select DISTINCT u.user_id,u.nickname,u.sex,u.remark,
         u.headimgurl,u.create_time,u.update_time,
         u.extend,u.country,u.province,
         u.city from sys_user u
-        left join sys_user_auth ua on ua.user_id = u.user_id where 1 = 1
+        left join sys_user_auth ua on ua.user_id = u.user_id where u.deleted = 0
         <if test="userId != null and userId != ''">
             and u.user_id = #{userId}
         </if>

@@ -6,7 +6,7 @@ import com.cenhai.common.utils.Base64;
 import com.cenhai.common.utils.StringUtils;
 import com.cenhai.common.web.domain.Result;
 import com.cenhai.framework.annotation.Log;
-import com.cenhai.plugs.redis.service.RedisCache;
+import com.cenhai.support.redis.service.RedisCache;
 import com.google.code.kaptcha.Producer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;

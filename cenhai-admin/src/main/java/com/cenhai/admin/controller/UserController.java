@@ -1,12 +1,13 @@
 package com.cenhai.admin.controller;
 
 import com.cenhai.common.utils.PageUtils;
+import com.cenhai.common.utils.StringUtils;
 import com.cenhai.common.utils.page.TableDataInfo;
 import com.cenhai.common.web.controller.BaseController;
 import com.cenhai.common.web.domain.Result;
 import com.cenhai.framework.annotation.Log;
-import com.cenhai.system.domain.dto.SimpleUserForm;
-import com.cenhai.system.domain.dto.UserQueryForm;
+import com.cenhai.system.param.SimpleUserParam;
+import com.cenhai.system.param.UserQueryParam;
 import com.cenhai.system.service.SysConfigService;
 import com.cenhai.system.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,26 +27,44 @@ public class UserController extends BaseController {
     private SysConfigService configService;
 
 
+    /**
+     * 返回用户列表
+     * @param param
+     * @return
+     */
     @GetMapping("/list")
-    public Result<TableDataInfo> list(UserQueryForm form){
+    public Result<TableDataInfo> list(UserQueryParam param){
         PageUtils.startPage();
-        return Result.success(PageUtils.getDataTable(userService.listUserAndUserAuth(form)));
-    }
-
-    @PostMapping("/updateOrSave")
-    @Log(title = "用户管理",info = "更新或者新增用户")
-    public Result updateOrSave(@RequestBody @Valid SimpleUserForm userForm){
-        return Result.result(userService.saveOrUpdate(userForm.toUser(configService.getConfigValue("default-headimg").toString())));
-    }
-
-    @PostMapping("/delete")
-    @Log(title = "用户管理",info = "删除用户")
-    public Result delete(@RequestBody Collection<Long> ids){
-        return Result.result(userService.deleteByUserIds(ids));
+        return Result.success(PageUtils.getDataTable(userService.listUser(param)));
     }
 
     /**
-     * 更新指导用户的角色
+     * 新增或更新用户信息
+     * @param param
+     * @return
+     */
+    @PostMapping("/updateOrSave")
+    @Log(title = "用户管理",info = "更新或者新增用户")
+    public Result updateOrSave(@RequestBody @Valid SimpleUserParam param){
+        //如果是新增切未设置头像，则使用默认头像
+        if (StringUtils.isNull(param.getHeadimgurl()) && StringUtils.isNotNull(param.getUserId()))
+            param.setHeadimgurl(configService.getConfigValue("default-headimg").toString());
+        return Result.result(userService.saveOrUpdate(param.toSysUser()));
+    }
+
+    /**
+     * 批量删除用户
+     * @param ids
+     * @return
+     */
+    @PostMapping("/delete")
+    @Log(title = "用户管理",info = "删除用户")
+    public Result delete(@RequestBody Collection<Long> ids){
+        return Result.result(userService.removeBatchByIds(ids));
+    }
+
+    /**
+     * 更新用户的角色
      * @param roleIds
      * @param userId
      * @return

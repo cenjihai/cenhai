@@ -1,4 +1,4 @@
-package com.cenhai.common.constant;
+package com.cenhai.common.enums;
 
 
 public enum ResultStatus{

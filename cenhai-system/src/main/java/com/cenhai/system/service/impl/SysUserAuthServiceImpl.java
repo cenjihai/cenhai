@@ -1,12 +1,12 @@
 package com.cenhai.system.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cenhai.common.constant.Constants;
 import com.cenhai.common.exception.ServiceException;
 import com.cenhai.common.utils.StringUtils;
 import com.cenhai.system.domain.SysUserAuth;
-import com.cenhai.system.domain.dto.SimplePasswordForm;
+import com.cenhai.system.param.SimpleUpdatePasswordParam;
 import com.cenhai.system.service.SysUserAuthService;
 import com.cenhai.system.mapper.SysUserAuthMapper;
 import org.springframework.dao.DuplicateKeyException;
@@ -23,25 +23,15 @@ public class SysUserAuthServiceImpl extends ServiceImpl<SysUserAuthMapper, SysUs
     implements SysUserAuthService{
 
     /**
-     * 根据身份名称和身份类型获取用户认证信息
-     *
-     * @param identifier
-     * @param identityType
+     * 获取密码认证方式的数据
+     * @param userId 用户ID
      * @return
      */
     @Override
-    public SysUserAuth getUserAuthByIdentifierAndIdentityType(String identifier, String identityType) {
-        return getOne(new QueryWrapper<SysUserAuth>()
-                .eq("identity_type",identityType)
-                .eq("identifier", identifier));
-    }
-
-
-    @Override
     public SysUserAuth getPasswordTypeByUserId(Long userId) {
-        return getOne(new QueryWrapper<SysUserAuth>()
-                .eq("user_id",userId)
-                .eq("identity_type",Constants.DEFAULT_SECURITY_IDENTITY_TYPE));
+        return getOne(new LambdaQueryWrapper<SysUserAuth>()
+                .eq(SysUserAuth::getUserId,userId)
+                .eq(SysUserAuth::getIdentityType,Constants.DEFAULT_SECURITY_IDENTITY_TYPE));
     }
 
     /**
@@ -51,43 +41,33 @@ public class SysUserAuthServiceImpl extends ServiceImpl<SysUserAuthMapper, SysUs
      * @return
      */
     @Override
-    public boolean updateOrSaveUserAuthByPassword(SysUserAuth userAuth) {
+    public boolean saveOrUpdateUserAuthByPassword(SysUserAuth userAuth) {
+        //设置为密码类型
         userAuth.setIdentityType(Constants.DEFAULT_SECURITY_IDENTITY_TYPE);
-        if (StringUtils.isEmpty(userAuth.getCredential())){
-            userAuth.setCredential(null);
-        }else {
+        if (StringUtils.isNotEmpty(userAuth.getCredential())){
             userAuth.setCredential(new BCryptPasswordEncoder().encode(userAuth.getCredential()));
         }
-        if (StringUtils.isNull(userAuth.getAuthId())){
-            userAuth.setVerified(Constants.YES);
-            try {
-                return save(userAuth);
-            }catch (DuplicateKeyException e){
-                throw new ServiceException("用户名已存在");
-            }
-        }else {
-            try {
-                return updateById(userAuth);
-            }catch (DuplicateKeyException e){
-                throw new ServiceException("用户名已存在");
-            }
+        try {
+            return saveOrUpdate(userAuth);
+        }catch (DuplicateKeyException e){
+            throw new ServiceException("用户名已存在");
         }
     }
 
     /**
      * 更新密码认证方式，必须填入用户ID
      *
-     * @param form
+     * @param param
      * @return
      */
     @Override
-    public boolean updateUserAuthByPasswordAndUserId(SimplePasswordForm form) {
-        SysUserAuth userAuth = getPasswordTypeByUserId(form.getUserId());
+    public boolean updatePasswordByUserId(SimpleUpdatePasswordParam param) {
+        SysUserAuth userAuth = getPasswordTypeByUserId(param.getUserId());
         if (StringUtils.isNull(userAuth))throw new ServiceException("未开启密码认证方式!");
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        if (!passwordEncoder.matches(form.getOldCredential(),userAuth.getCredential()))
+        if (!passwordEncoder.matches(param.getOldCredential(),userAuth.getCredential()))
             throw new ServiceException("原密码错误");
-        userAuth.setCredential(passwordEncoder.encode(form.getCredential()));
+        userAuth.setCredential(passwordEncoder.encode(param.getCredential()));
         return updateById(userAuth);
     }
 

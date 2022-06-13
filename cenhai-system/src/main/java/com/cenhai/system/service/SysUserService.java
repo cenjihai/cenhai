@@ -2,7 +2,7 @@ package com.cenhai.system.service;
 
 import com.cenhai.system.domain.SysUser;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.cenhai.system.domain.dto.UserQueryForm;
+import com.cenhai.system.param.UserQueryParam;
 
 import java.util.Collection;
 import java.util.List;
@@ -14,9 +14,18 @@ import java.util.List;
 */
 public interface SysUserService extends IService<SysUser> {
 
-    List<SysUser> listUserAndUserAuth(UserQueryForm form);
+    /**
+     * 返回用户列表
+     * @param param
+     * @return
+     */
+    List<SysUser> listUser(UserQueryParam param);
 
-    boolean deleteByUserIds(Collection<Long> ids);
-
+    /**
+     * 更新用户的角色
+     * @param userId
+     * @param roleIds
+     * @return
+     */
     boolean updateUserRoleByUserId(Long userId, Collection<Long> roleIds);
 }

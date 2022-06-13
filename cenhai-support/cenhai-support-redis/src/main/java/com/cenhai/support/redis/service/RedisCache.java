@@ -1,4 +1,4 @@
-package com.cenhai.plugs.redis.service;
+package com.cenhai.support.redis.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundSetOperations;

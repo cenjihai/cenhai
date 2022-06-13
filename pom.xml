@@ -11,7 +11,7 @@
     <modules>
         <module>cenhai-common</module>
         <module>cenhai-framework</module>
-        <module>cenhai-plugs</module>
+        <module>cenhai-support</module>
         <module>cenhai-system</module>
         <module>cenhai-admin</module>
     </modules>
@@ -24,7 +24,7 @@
         <springboot.version>2.5.12</springboot.version>
         <druid.version>1.2.8</druid.version>
         <swagger.version>3.0.0</swagger.version>
-        <mybatis-plus.version>3.5.1</mybatis-plus.version>
+        <mybatis-plus.version>3.5.2</mybatis-plus.version>
         <pagehelper.boot.version>1.4.0</pagehelper.boot.version>
         <fastjson.version>1.2.78</fastjson.version>
         <cenjihai.version>1.0.0</cenjihai.version>

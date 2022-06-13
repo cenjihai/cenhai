@@ -2,13 +2,12 @@ package com.cenhai.admin.controller;
 
 import com.cenhai.common.constant.Constants;
 import com.cenhai.common.utils.PageUtils;
-import com.cenhai.common.utils.StringUtils;
 import com.cenhai.common.utils.page.TableDataInfo;
 import com.cenhai.common.web.controller.BaseController;
 import com.cenhai.common.web.domain.Result;
 import com.cenhai.framework.annotation.Log;
 import com.cenhai.system.domain.SysPlugin;
-import com.cenhai.system.domain.dto.PluginQueryForm;
+import com.cenhai.system.param.PluginQueryParam;
 import com.cenhai.system.service.SysPluginService;
 import com.gitee.starblues.core.PluginInfo;
 import com.gitee.starblues.core.exception.PluginException;
@@ -18,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 
 @RestController
 @RequestMapping("/plugin")
@@ -30,32 +28,22 @@ public class PluginController extends BaseController {
     @Autowired
     private PluginOperator pluginOperator;
 
+    /**
+     * 查询
+     * @param param
+     * @return
+     */
     @GetMapping("/list")
-    public Result<TableDataInfo> list(PluginQueryForm queryForm){
+    public Result<TableDataInfo> list(PluginQueryParam param){
         PageUtils.startPage();
-        return Result.success(PageUtils.getDataTable(pluginService.listPlugin(queryForm)));
+        return Result.success(PageUtils.getDataTable(pluginService.listPlugin(param)));
     }
 
-    @PostMapping("/install/{pluginId}")
-    @Log(title = "插件管理", info = "安装插件")
-    public Result install(@PathVariable String pluginId){
-        SysPlugin plugin = pluginService.getById(pluginId);
-        if (StringUtils.isNotNull(plugin)){
-            try {
-                File file = new File(plugin.getPluginPath());
-                PluginInfo pluginInfo =  pluginOperator.install(file.toPath(),false);
-                return Result.success(pluginInfo);
-            }catch (PluginException e){
-                e.printStackTrace();
-                return Result.error("安装失败");
-            }catch (Exception e){
-                e.printStackTrace();
-                return Result.error("插件异常");
-            }
-        }
-        return Result.error("插件不存在");
-    }
-
+    /**
+     * 卸载插件
+     * @param pluginId
+     * @return
+     */
     @PostMapping("/uninstall/{pluginId}")
     @Log(title = "插件管理", info = "卸载插件")
     public Result uninstall(@PathVariable String pluginId){

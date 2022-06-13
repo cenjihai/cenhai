@@ -2,7 +2,7 @@ package com.cenhai.system.service;
 
 import com.cenhai.system.domain.SysPlugin;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.cenhai.system.domain.dto.PluginQueryForm;
+import com.cenhai.system.param.PluginQueryParam;
 
 import java.util.List;
 
@@ -13,33 +13,18 @@ import java.util.List;
 */
 public interface SysPluginService extends IService<SysPlugin> {
 
-    List<SysPlugin> listPlugin(PluginQueryForm queryForm);
-
     /**
-     * 卸载插件
-     * @param pluginId
+     * 查询插件列表
+     * @param param
      * @return
      */
-    boolean uninstall(String pluginId);
+    List<SysPlugin> listPlugin(PluginQueryParam param);
 
     /**
-     * 安装
+     * 改变状态
      * @param pluginId
+     * @param status
      * @return
      */
-    boolean install(String pluginId);
-
-    /**
-     * 启动
-     * @param pluginId
-     * @return
-     */
-    boolean start(String pluginId);
-
-    /**
-     * 停止
-     * @param pluginId
-     * @return
-     */
-    boolean stop(String pluginId);
+    boolean changeStatus(String pluginId, String status);
 }
