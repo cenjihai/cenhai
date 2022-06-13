@@ -2,12 +2,12 @@ package com.cenhai.framework.config;
 
 import com.alibaba.fastjson.JSON;
 import com.cenhai.common.enums.ResultStatus;
+import com.cenhai.common.utils.ServletUtils;
 import com.cenhai.common.web.domain.Result;
 import com.cenhai.framework.security.filter.JwtAuthenticationTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
@@ -95,9 +95,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
             if (authException instanceof InsufficientAuthenticationException) {
-                result(response,new Result<>(ResultStatus.UNAUTHORIZED));
+                ServletUtils.renderString(response,JSON.toJSONString(new Result<>(ResultStatus.UNAUTHORIZED)));
             }else {
-                result(response,Result.error(authException.getMessage()));
+                ServletUtils.renderString(response,JSON.toJSONString(Result.error(authException.getMessage())));
             }
         }
     }
@@ -109,14 +109,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         @Override
         public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-            result(response,new Result<>(ResultStatus.FORBIDDEN));
+            ServletUtils.renderString(response,JSON.toJSONString(new Result<>(ResultStatus.FORBIDDEN)));
         }
-    }
-
-    private void result(HttpServletResponse response, Result result) throws IOException {
-        response.setHeader("content-type","application/json; charset=utf-8");
-        response.setStatus(HttpStatus.OK.value());
-        response.getWriter().println(JSON.toJSONString(result));
     }
 
     @Bean

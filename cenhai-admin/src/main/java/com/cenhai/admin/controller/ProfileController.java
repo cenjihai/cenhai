@@ -1,6 +1,8 @@
 package com.cenhai.admin.controller;
 
-import com.cenhai.common.utils.HeadimgUtils;
+import com.cenhai.common.config.SystemConfig;
+import com.cenhai.common.constant.Constants;
+import com.cenhai.common.utils.ImageUtils;
 import com.cenhai.common.utils.StringUtils;
 import com.cenhai.common.web.controller.BaseController;
 import com.cenhai.common.web.domain.Result;
@@ -66,8 +68,13 @@ public class ProfileController extends BaseController {
         param.setRemark(null);
         //判断头像处理
         String defaultHeadimgurl = configService.getConfigValue("default-headimg").toString();
-        if (!StringUtils.ishttp(param.getHeadimgurl()) && !param.getHeadimgurl().equals(defaultHeadimgurl)){
-            param.setHeadimgurl(HeadimgUtils.saveBase64ToLocalImage(param.getHeadimgurl(),serverConfig.getUrl()));
+        //判断头像不是http地址的。或者默认的头像。则是新上传的base64字符串
+        if (StringUtils.isNotEmpty(param.getHeadimgurl()) && param.getHeadimgurl().matches("^data:image(.*)")){
+            String filename = ImageUtils.convertBase64ToImage(param.getHeadimgurl(), SystemConfig.getAvatarPath());
+            if (filename == null){
+                return Result.error("头像解析失败，请重新上传");
+            }
+            param.setHeadimgurl(serverConfig.getUrl() + Constants.RESOURCE_PREFIX + "/avatar/" + filename);
         }
         if (StringUtils.isNull(param.getHeadimgurl()))param.setHeadimgurl(defaultHeadimgurl);
         return Result.result(userService.updateById(param.toSysUser()));

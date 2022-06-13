@@ -2,8 +2,6 @@ package com.cenhai.framework;
 
 import com.cenhai.common.exception.ServiceException;
 import com.cenhai.common.web.domain.Result;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.LockedException;
@@ -20,7 +18,6 @@ import java.util.Objects;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(ServiceException.class)
     public Result serviceException(ServiceException e){
