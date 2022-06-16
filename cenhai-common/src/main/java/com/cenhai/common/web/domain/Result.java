@@ -1,74 +1,54 @@
 package com.cenhai.common.web.domain;
 
 
-import com.cenhai.common.enums.ResultStatus;
+import com.cenhai.common.enums.ResultCode;
+import com.cenhai.common.enums.StatusCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
-public class Result<T>{
+public class Result{
 
     private Integer code;
 
     private String msg;
 
-    private T data;
+    private Object data;
 
     private Long timestamp;
 
-    public Result() {
+    public Result(int code, String msg, Object data){
         this.timestamp = System.currentTimeMillis();
+        this.code = code;
+        this.msg = msg;
+        this.data = data;
     }
 
-    public Result(ResultStatus resultStatus) {
+    public Result(StatusCode statusCode, Object data){
         this.timestamp = System.currentTimeMillis();
-        this.code = resultStatus.getCode();
-        this.msg = resultStatus.getMsg();
+        this.code = statusCode.getCode();
+        this.msg = statusCode.getMsg();
+        this.data = data;
     }
 
-    public static <T> Result<T> success(T data){
-        Result<T> result = new Result<>();
-        result.setCode(ResultStatus.OK.getCode());
-        result.setMsg(ResultStatus.OK.getMsg());
-        result.setData(data);
-        return result;
+    public static Result success(Object data){
+        return new Result(ResultCode.OK, data);
     }
 
-    public static <T> Result<T> success(){
-        Result<T> result = new Result<>();
-        result.setCode(ResultStatus.OK.getCode());
-        result.setMsg(ResultStatus.OK.getMsg());
-        return result;
+    public static Result error(String msg){
+        return new Result(ResultCode.ERROR,msg);
     }
 
-    public static <T> Result<T> success(String msg, T data){
-        Result<T> result = new Result<>();
-        result.setCode(ResultStatus.OK.getCode());
-        result.setMsg(msg);
-        result.setData(data);
-        return result;
+    public static Result error(StatusCode statusCode, String msg){
+        return new Result(statusCode,msg);
     }
 
-    public static <T>Result<T> error(Integer code, String msg){
-        Result<T> result = new Result<>();
-        result.setCode(code);
-        result.setMsg(msg);
-        return result;
-    }
-
-    public static <T>Result<T> error(String msg){
-        Result<T> result = new Result<>();
-        result.setCode(ResultStatus.ERROR.getCode());
-        result.setMsg(msg);
-        return result;
-    }
-
-    public static <T>Result<T> result(boolean bool){
+    public static Result resultBool(boolean bool, String msg){
         if (bool){
-            return new Result<>(ResultStatus.OK);
+            return new Result(ResultCode.OK,msg);
         }else {
-            return new Result<>(ResultStatus.ERROR);
+            return new Result(ResultCode.ERROR, msg);
         }
     }
 }

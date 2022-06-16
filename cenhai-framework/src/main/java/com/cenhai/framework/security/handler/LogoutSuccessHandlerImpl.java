@@ -23,6 +23,6 @@ public class LogoutSuccessHandlerImpl  implements LogoutSuccessHandler {
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         tokenService.logout(request);
-        ServletUtils.renderString(response,JSON.toJSONString( Result.success()));
+        ServletUtils.renderString(response,JSON.toJSONString(Result.success("您已成功退出系统！")));
     }
 }

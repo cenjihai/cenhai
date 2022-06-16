@@ -2,7 +2,7 @@ package com.cenhai.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.cenhai.common.exception.ServiceException;
+import com.cenhai.common.exception.ApiException;
 import com.cenhai.common.utils.StringUtils;
 import com.cenhai.system.domain.SysMenu;
 import com.cenhai.system.domain.SysRoleMenu;
@@ -70,7 +70,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu>
     public boolean deleteMenuByMenuId(Long menuId) {
         long count = count(new LambdaQueryWrapper<SysMenu>()
                 .eq(SysMenu::getParentMenuId,menuId));
-        if (count > 0)throw new ServiceException("请先删除当前项的子项");
+        if (count > 0)throw new ApiException("请先删除当前项的子项");
         return removeById(menuId);
     }
 

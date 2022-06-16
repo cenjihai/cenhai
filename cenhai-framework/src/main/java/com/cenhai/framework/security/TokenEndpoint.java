@@ -1,11 +1,11 @@
 package com.cenhai.framework.security;
 
 import com.cenhai.common.constant.Constants;
-import com.cenhai.common.exception.ServiceException;
+import com.cenhai.common.enums.ResultCode;
+import com.cenhai.common.exception.ApiException;
 import com.cenhai.common.utils.Base64;
 import com.cenhai.common.utils.StringUtils;
-import com.cenhai.common.web.domain.Result;
-import com.cenhai.framework.annotation.Log;
+import com.cenhai.framework.annotation.OperatedLog;
 import com.cenhai.support.redis.service.RedisCache;
 import com.google.code.kaptcha.Producer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +25,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 暴露的token获取端点
+ */
 @Component
 @RestController
 public class TokenEndpoint {
@@ -43,15 +46,15 @@ public class TokenEndpoint {
 
 
     @RequestMapping(value = {"/auth/token"},method = {RequestMethod.POST})
-    @Log(title = "登录日志", info = "系统登录入口")
-    public Object authenticate(@RequestBody Map<String,String> principal){
+    @OperatedLog(title = "登录日志", info = "系统登录入口")
+    public Map<String,String> authenticate(@RequestBody Map<String,String> principal){
         validateCaptcha(principal.get("code"), principal.get("uuid"));
         Authentication authentication = new UsernamePasswordAuthenticationToken(principal.get("username"),principal.get("password"));
-        return Result.success(createSuccessResult(authenticationManager.authenticate(authentication),Constants.DEFAULT_SECURITY_IDENTITY_TYPE));
+        return createSuccessResult(authenticationManager.authenticate(authentication),Constants.DEFAULT_SECURITY_IDENTITY_TYPE);
     }
 
     @GetMapping("/captcha")
-    public Result getCaptcha(){
+    public Map<String, Object> getCaptcha(){
         String capStr = null, code = null;
         String uuid = UUID.randomUUID().toString();
         String key = Constants.CAPTCHA_REDIS_KEY + uuid;
@@ -64,22 +67,22 @@ public class TokenEndpoint {
         try {
             ImageIO.write(image,"jpg",os);
         }catch (IOException e){
-            return Result.error(e.getMessage());
+            throw new ApiException(ResultCode.ERROR,"生成验证码失败");
         }
         Map<String, Object> map = new HashMap<>();
         map.put("uuid",uuid);
         map.put("imageBase64", Base64.encode(os.toByteArray()));
-        return Result.success(map);
+        return map;
     }
 
     public void validateCaptcha(String code, String uuid){
         String key = Constants.CAPTCHA_REDIS_KEY + StringUtils.nvl(uuid,"");
         String captcha = redisCache.getCacheObject(key);
         if (captcha == null){
-            throw new ServiceException("验证码错误");
+            throw new ApiException(ResultCode.ERROR,"验证码已过期");
         }
         if (!code.equalsIgnoreCase(captcha)){
-            throw new ServiceException("验证码错误");
+            throw new ApiException(ResultCode.ERROR,"验证码错误");
         }
     }
 

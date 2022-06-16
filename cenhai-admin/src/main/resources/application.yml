@@ -43,6 +43,10 @@ mybatis-plus:
       logic-not-delete-value: 0
       logic-delete-value: 1
       logic-delete-field: deleted
+#分页参数合理化
+pagehelper:
+  reasonable: true
+#jwt token配置
 token:
   header: Authorization
   secret: dasd12s3ad1a23

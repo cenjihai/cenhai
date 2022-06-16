@@ -1,5 +1,9 @@
 package com.cenhai.common.constant;
 
+/**
+ * 系统常量
+ * @author cenjihai
+ */
 public class Constants {
 
     /**
@@ -22,10 +26,19 @@ public class Constants {
      */
     public final static String NO = "N";
 
+    /**
+     * 暴露资源前缀
+     */
     public final static String RESOURCE_PREFIX = "/resource";
 
+    /**
+     * 验证码redis 缓存key
+     */
     public final static String CAPTCHA_REDIS_KEY = "Authorization:captcha:";
 
+    /**
+     * 验证码缓存时间 2分钟
+     */
     public final static Integer CAPTCHA_EXPIRATION = 2;
 
     /**

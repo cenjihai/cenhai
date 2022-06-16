@@ -4,8 +4,18 @@ import java.io.*;
 import java.util.Base64;
 import java.util.UUID;
 
+/**
+ * 图片工具
+ * @author cenjihai
+ */
 public class ImageUtils {
 
+    /**
+     * 将base64 字符转为本地图片
+     * @param base64Code
+     * @param savePath
+     * @return
+     */
     public static String convertBase64ToImage(String base64Code, String savePath){
         String filename = UUID.randomUUID() + ".jpg";
         try {

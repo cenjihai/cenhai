@@ -21,9 +21,6 @@ public class PageDomain
     /** 排序的方向desc或者asc */
     private String isAsc = "asc";
 
-    /** 分页参数合理化 */
-    private Boolean reasonable = true;
-
     public String getOrderBy()
     {
         if (StringUtils.isEmpty(orderByColumn))
@@ -97,14 +94,5 @@ public class PageDomain
             }
             this.isAsc = isAsc;
         }
-    }
-
-    public Boolean getReasonable()
-    {
-        if (reasonable == null)
-        {
-            return Boolean.TRUE;
-        }
-        return reasonable;
     }
 }

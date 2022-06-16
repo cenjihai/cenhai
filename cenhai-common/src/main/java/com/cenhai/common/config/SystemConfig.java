@@ -3,6 +3,11 @@ package com.cenhai.common.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+/**
+ * 系统配置
+ * @author cenjihai
+ *
+ */
 @Component
 @ConfigurationProperties(prefix = "cenhai")
 public class SystemConfig {

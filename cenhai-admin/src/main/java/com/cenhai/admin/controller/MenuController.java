@@ -3,7 +3,7 @@ package com.cenhai.admin.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cenhai.common.web.controller.BaseController;
 import com.cenhai.common.web.domain.Result;
-import com.cenhai.framework.annotation.Log;
+import com.cenhai.framework.annotation.OperatedLog;
 import com.cenhai.system.domain.SysMenu;
 import com.cenhai.system.domain.vo.MenuTreeTable;
 import com.cenhai.system.service.SysMenuService;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -29,32 +30,33 @@ public class MenuController extends BaseController {
      * @return
      */
     @GetMapping("/list")
-    public Result<List<MenuTreeTable>> list(SysMenu menu){
+    public List<MenuTreeTable> list(SysMenu menu){
         List<SysMenu> menus = menuService.list(new QueryWrapper<>(menu));
         List<MenuTreeTable> menuTreeTables = new ArrayList<>();
         for (SysMenu m: menus){
             menuTreeTables.add(new MenuTreeTable(m));
         }
-        return Result.success(menuTreeTables);
+        return menuTreeTables;
     }
 
     @PostMapping("/updateOrSave")
-    @Log(title = "菜单管理",info = "更新菜单")
-    public Result update(@RequestBody SysMenu menu){
+    @OperatedLog(title = "菜单管理",info = "更新菜单")
+    public Object update(@RequestBody SysMenu menu){
         try {
             if (menuService.saveOrUpdate(menu)){
-                return Result.success(new MenuTreeTable(menu));
+                return new MenuTreeTable(menu);
             }
-            return Result.result(false);
+            return Result.error("保存失败!");
         }catch (DuplicateKeyException e){
             return Result.error("菜单或目录地址已经存在!");
         }
     }
 
     @PostMapping("/delete/{menuId}")
-    @Log(title = "配置管理",info = "删除菜单")
+    @OperatedLog(title = "配置管理",info = "删除菜单")
     public Result delete(@PathVariable Long menuId){
-        return Result.result(menuService.deleteMenuByMenuId(menuId));
+        if (menuService.deleteMenuByMenuId(menuId))return Result.success("删除成功");
+            return Result.error("删除失败");
     }
 
     /**
@@ -63,8 +65,8 @@ public class MenuController extends BaseController {
      * @return
      */
     @GetMapping("/listSelectedAndAllMenu/{roleId}")
-    public Result listSelectedAndAllMenu(@PathVariable Long roleId){
-        return Result.success(menuService.listSelectedAndAllMenuByRoleId(roleId));
+    public Map<String, Object> listSelectedAndAllMenu(@PathVariable Long roleId){
+        return menuService.listSelectedAndAllMenuByRoleId(roleId);
     }
 
     /**
@@ -74,8 +76,9 @@ public class MenuController extends BaseController {
      * @return
      */
     @PostMapping("/assignToRole/{roleId}")
-    @Log(title = "配置管理",info = "分配菜单给角色")
+    @OperatedLog(title = "配置管理",info = "分配菜单给角色")
     public Result assignToRole(@PathVariable Long roleId, @RequestBody Collection<Long> menuIds){
-        return Result.result(menuService.assignToRoleByRoleId(roleId, menuIds));
+        if (menuService.assignToRoleByRoleId(roleId, menuIds))return Result.success("保存成功");
+            return Result.error("保存失败");
     }
 }

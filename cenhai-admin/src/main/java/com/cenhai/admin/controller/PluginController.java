@@ -1,11 +1,11 @@
 package com.cenhai.admin.controller;
 
 import com.cenhai.common.constant.Constants;
-import com.cenhai.common.utils.PageUtils;
+import com.cenhai.common.utils.page.PageUtils;
 import com.cenhai.common.utils.page.TableDataInfo;
 import com.cenhai.common.web.controller.BaseController;
 import com.cenhai.common.web.domain.Result;
-import com.cenhai.framework.annotation.Log;
+import com.cenhai.framework.annotation.OperatedLog;
 import com.cenhai.system.domain.SysPlugin;
 import com.cenhai.system.param.PluginQueryParam;
 import com.cenhai.system.service.SysPluginService;
@@ -34,9 +34,9 @@ public class PluginController extends BaseController {
      * @return
      */
     @GetMapping("/list")
-    public Result<TableDataInfo> list(PluginQueryParam param){
+    public TableDataInfo list(PluginQueryParam param){
         PageUtils.startPage();
-        return Result.success(PageUtils.getDataTable(pluginService.listPlugin(param)));
+        return PageUtils.getDataTable(pluginService.listPlugin(param));
     }
 
     /**
@@ -45,13 +45,13 @@ public class PluginController extends BaseController {
      * @return
      */
     @PostMapping("/uninstall/{pluginId}")
-    @Log(title = "插件管理", info = "卸载插件")
+    @OperatedLog(title = "插件管理", info = "卸载插件")
     public Result uninstall(@PathVariable String pluginId){
         try {
             pluginOperator.uninstall(pluginId, true, true);
-            return Result.success();
+            return Result.success("卸载成功-插件ID: " + pluginId);
         }catch (PluginException e){
-            return Result.error("卸载失败");
+            return Result.error("卸载失败-插件ID: " + pluginId);
         }
     }
 
@@ -79,14 +79,14 @@ public class PluginController extends BaseController {
                 plugin.setStatus(Constants.NORMAL);
                 if (!pluginService.save(plugin)){
                     pluginOperator.uninstall(pluginInfo.getPluginId(),true,true);
-                    return Result.error("记录插件信息失败!");
+                    return Result.error("插件数据保存失败!");
                 }
-                return Result.success();
+                return Result.success("插件安装成功、启动成功-插件ID: " + pluginInfo.getPluginId());
             }else {
-                return Result.error("插件安装失败");
+                return Result.error("插件安装失败-插件ID: " + pluginInfo.getPluginId());
             }
         }catch (Exception e){
-            return Result.error(e.getMessage());
+            return Result.error("插件安装异常-异常信息: " + e.getMessage());
         }
     }
 
@@ -96,15 +96,17 @@ public class PluginController extends BaseController {
      * @return
      */
     @PostMapping("/changeStatus")
-    @Log(title = "插件管理", info = "启动或关闭插件")
+    @OperatedLog(title = "插件管理", info = "启动或关闭插件")
     public Result changeStatus(@RequestBody SysPlugin plugin){
         try {
             if (Constants.NORMAL.equals(plugin.getStatus())){
                 pluginOperator.start(plugin.getPluginId());
-            }else if (Constants.DISABLE.equals(plugin.getStatus())){
+                return Result.success("插件" + plugin.getPluginId() + "启动成功");
+            }else{
                 pluginOperator.stop(plugin.getPluginId());
+                return Result.success("插件" + plugin.getPluginId() + "停止成功");
             }
-            return Result.success();
+
         }catch (Exception e){
             return Result.error(e.getMessage());
         }

@@ -1,7 +1,7 @@
 package com.cenhai.framework.config;
 
 import com.alibaba.fastjson.JSON;
-import com.cenhai.common.enums.ResultStatus;
+import com.cenhai.common.enums.ResultCode;
 import com.cenhai.common.utils.ServletUtils;
 import com.cenhai.common.web.domain.Result;
 import com.cenhai.framework.security.filter.JwtAuthenticationTokenFilter;
@@ -95,7 +95,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
             if (authException instanceof InsufficientAuthenticationException) {
-                ServletUtils.renderString(response,JSON.toJSONString(new Result<>(ResultStatus.UNAUTHORIZED)));
+                ServletUtils.renderString(response,JSON.toJSONString(Result.error(ResultCode.UNAUTHORIZED,"请登录后访问!")));
             }else {
                 ServletUtils.renderString(response,JSON.toJSONString(Result.error(authException.getMessage())));
             }
@@ -109,7 +109,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         @Override
         public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-            ServletUtils.renderString(response,JSON.toJSONString(new Result<>(ResultStatus.FORBIDDEN)));
+            ServletUtils.renderString(response,JSON.toJSONString(Result.error(ResultCode.FORBIDDEN, "您无权限访问该内容!")));
         }
     }
 

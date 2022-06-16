@@ -1,11 +1,11 @@
 package com.cenhai.admin.controller;
 
-import com.cenhai.common.utils.PageUtils;
+import com.cenhai.common.utils.page.PageUtils;
 import com.cenhai.common.utils.StringUtils;
 import com.cenhai.common.utils.page.TableDataInfo;
 import com.cenhai.common.web.controller.BaseController;
 import com.cenhai.common.web.domain.Result;
-import com.cenhai.framework.annotation.Log;
+import com.cenhai.framework.annotation.OperatedLog;
 import com.cenhai.system.param.SimpleUserParam;
 import com.cenhai.system.param.UserQueryParam;
 import com.cenhai.system.service.SysConfigService;
@@ -33,9 +33,9 @@ public class UserController extends BaseController {
      * @return
      */
     @GetMapping("/list")
-    public Result<TableDataInfo> list(UserQueryParam param){
+    public TableDataInfo list(UserQueryParam param){
         PageUtils.startPage();
-        return Result.success(PageUtils.getDataTable(userService.listUser(param)));
+        return PageUtils.getDataTable(userService.listUser(param));
     }
 
     /**
@@ -44,12 +44,13 @@ public class UserController extends BaseController {
      * @return
      */
     @PostMapping("/updateOrSave")
-    @Log(title = "用户管理",info = "更新或者新增用户")
+    @OperatedLog(title = "用户管理",info = "更新或者新增用户")
     public Result updateOrSave(@RequestBody @Valid SimpleUserParam param){
         //如果是新增切未设置头像，则使用默认头像
         if (StringUtils.isNull(param.getHeadimgurl()) && StringUtils.isNotNull(param.getUserId()))
             param.setHeadimgurl(configService.getConfigValue("default-headimg").toString());
-        return Result.result(userService.saveOrUpdate(param.toSysUser()));
+        if (userService.saveOrUpdate(param.toSysUser()))return Result.success("保存成功");
+        return Result.error("保存失败");
     }
 
     /**
@@ -58,9 +59,10 @@ public class UserController extends BaseController {
      * @return
      */
     @PostMapping("/delete")
-    @Log(title = "用户管理",info = "删除用户")
+    @OperatedLog(title = "用户管理",info = "删除用户")
     public Result delete(@RequestBody Collection<Long> ids){
-        return Result.result(userService.removeBatchByIds(ids));
+        if (userService.removeBatchByIds(ids))return Result.success("删除成功");
+        return Result.error("删除失败");
     }
 
     /**
@@ -70,8 +72,9 @@ public class UserController extends BaseController {
      * @return
      */
     @PostMapping("/updateRole/{userId}")
-    @Log(title = "用户管理",info = "更新用户的角色")
+    @OperatedLog(title = "用户管理",info = "更新用户的角色")
     public Result updateRole(@RequestBody Collection<Long> roleIds, @PathVariable Long userId){
-        return Result.result(userService.updateUserRoleByUserId(userId, roleIds));
+        if (userService.updateUserRoleByUserId(userId, roleIds))return Result.success("保存成功");
+        return Result.error("保存失败");
     }
 }

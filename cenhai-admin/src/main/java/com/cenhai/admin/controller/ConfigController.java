@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cenhai.common.constant.Constants;
 import com.cenhai.common.web.controller.BaseController;
 import com.cenhai.common.web.domain.Result;
-import com.cenhai.framework.annotation.Log;
+import com.cenhai.framework.annotation.OperatedLog;
 import com.cenhai.system.domain.SysConfig;
 import com.cenhai.system.domain.SysConfigGroup;
 import com.cenhai.system.param.SimpleUpdateConfigParam;
@@ -32,8 +32,8 @@ public class ConfigController extends BaseController {
      * @return
      */
     @GetMapping("/listGroup")
-    public Result<List<SysConfigGroup>> listGroup(){
-        return Result.success(configGroupService.list());
+    public List<SysConfigGroup> listGroup(){
+        return configGroupService.list();
     }
 
     /**
@@ -42,11 +42,11 @@ public class ConfigController extends BaseController {
      * @return
      */
     @GetMapping("/listConfig/{groupId}")
-    public Result<List<SysConfig>> listConfig(@PathVariable Long groupId){
-        return Result.success(configService.list(new QueryWrapper<SysConfig>()
+    public List<SysConfig> listConfig(@PathVariable Long groupId){
+        return configService.list(new QueryWrapper<SysConfig>()
                 .eq("group_id",groupId)
                 .eq("status",Constants.NORMAL)
-                .orderByAsc("config_order")));
+                .orderByAsc("config_order"));
     }
 
     /**
@@ -55,8 +55,9 @@ public class ConfigController extends BaseController {
      * @return
      */
     @PostMapping("/batchUpdate")
-    @Log(title = "配置管理",info = "更新配置")
+    @OperatedLog(title = "配置管理",info = "更新配置")
     public Result batchUpdate(@RequestBody List<SimpleUpdateConfigParam> configForms){
-        return Result.result(configService.batchUpdateByAdmin(configForms));
+        if (configService.batchUpdateByAdmin(configForms))return Result.success("配置更新成功！");
+            return Result.error("更新失败");
     }
 }

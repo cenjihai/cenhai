@@ -5,7 +5,7 @@ import com.cenhai.common.constant.Constants;
 import com.cenhai.common.utils.IpUtils;
 import com.cenhai.common.utils.ServletUtils;
 import com.cenhai.common.utils.StringUtils;
-import com.cenhai.framework.annotation.Log;
+import com.cenhai.framework.annotation.OperatedLog;
 import com.cenhai.framework.security.SecurityUtils;
 import com.cenhai.framework.security.SystemUserDetails;
 import com.cenhai.system.domain.SysOperlog;
@@ -29,10 +29,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * 操作日志aop
+ */
 @Aspect
 @Component
-public class LogAspect {
+public class OperatedLogAspect {
 
     private static final Logger logger = LoggerFactory.getLogger("sys-operlog");
 
@@ -42,26 +44,26 @@ public class LogAspect {
     /**
      * 处理完请求后执行
      * @param joinPoint
-     * @param log
+     * @param operatedLog
      * @param obj
      */
-    @AfterReturning(pointcut = "@annotation(log)", returning = "obj")
-    public void doAfterReturning(JoinPoint joinPoint, Log log, Object obj){
-        logHandler(joinPoint,log,null,obj);
+    @AfterReturning(pointcut = "@annotation(operatedLog)", returning = "obj")
+    public void doAfterReturning(JoinPoint joinPoint, OperatedLog operatedLog, Object obj){
+        logHandler(joinPoint, operatedLog,null,obj);
     }
 
     /**
      * 拦截异常
      * @param joinPoint
-     * @param log
+     * @param operatedLog
      * @param e
      */
-    @AfterThrowing(value = "@annotation(log)", throwing = "e")
-    public void doAfterThrowing(JoinPoint joinPoint, Log log, Exception e){
-        logHandler(joinPoint,log, e,null);
+    @AfterThrowing(value = "@annotation(operatedLog)", throwing = "e")
+    public void doAfterThrowing(JoinPoint joinPoint, OperatedLog operatedLog, Exception e){
+        logHandler(joinPoint, operatedLog, e,null);
     }
 
-    private void logHandler(final JoinPoint joinPoint, Log log, final Exception e, Object obj){
+    private void logHandler(final JoinPoint joinPoint, OperatedLog operatedLog, final Exception e, Object obj){
         SysOperlog operlog = new SysOperlog();
         try {
             SystemUserDetails userDetails = SecurityUtils.getUserDetails();
@@ -85,8 +87,8 @@ public class LogAspect {
             operlog.setErrMsg(StringUtils.substring(e1.getMessage(), 0, 2000));
             operlog.setStatus(Constants.DISABLE);
         }
-        operlog.setTitle(log.title());
-        operlog.setInfo(log.info());
+        operlog.setTitle(operatedLog.title());
+        operlog.setInfo(operatedLog.info());
         operlogService.save(operlog);
     }
 

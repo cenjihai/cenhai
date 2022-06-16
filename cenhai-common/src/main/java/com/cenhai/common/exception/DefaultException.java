@@ -1,22 +1,27 @@
 package com.cenhai.common.exception;
 
+import com.cenhai.common.enums.StatusCode;
+import lombok.Getter;
+
+/**
+ * 系统默认异常
+ * @author cenjihai
+ */
+@Getter
 public class DefaultException extends RuntimeException{
+
     private static final long serialVersionUID = 1L;
 
     /**
      * 错误码
      */
-    private Integer code;
+    private int code;
 
-    private String defaultMessage;
+    private String msg;
 
-    public DefaultException(Integer code, String defaultMessage){
-        super(defaultMessage);
-        this.code = code;
-        this.defaultMessage = defaultMessage;
-    }
-
-    public DefaultException(String defaultMessage){
-        super(defaultMessage);
+    public DefaultException(StatusCode statusCode, String msg){
+        super(msg);
+        this.code = statusCode.getCode();
+        this.msg = statusCode.getMsg();
     }
 }

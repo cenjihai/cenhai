@@ -1,8 +1,5 @@
-package com.cenhai.common.utils;
+package com.cenhai.common.utils.page;
 
-import com.cenhai.common.utils.page.PageDomain;
-import com.cenhai.common.utils.page.TableDataInfo;
-import com.cenhai.common.utils.page.TableSupport;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;

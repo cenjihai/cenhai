@@ -6,7 +6,7 @@ import com.cenhai.common.utils.ImageUtils;
 import com.cenhai.common.utils.StringUtils;
 import com.cenhai.common.web.controller.BaseController;
 import com.cenhai.common.web.domain.Result;
-import com.cenhai.framework.annotation.Log;
+import com.cenhai.framework.annotation.OperatedLog;
 import com.cenhai.framework.config.ServerConfig;
 import com.cenhai.framework.security.SecurityUtils;
 import com.cenhai.system.domain.SysUserAuth;
@@ -47,12 +47,12 @@ public class ProfileController extends BaseController {
      * @return
      */
     @GetMapping("/getInfo")
-    public Result<Map<String,Object>> getInfo(){
+    public Map<String,Object> getInfo(){
         Long userId = SecurityUtils.getUserId();
         Map<String,Object> data = new HashMap<>();
         data.put("userInfo", userService.getById(userId));
         data.put("permissions", SecurityUtils.getPerms());
-        return Result.success(data);
+        return data;
     }
 
     /**
@@ -61,7 +61,7 @@ public class ProfileController extends BaseController {
      * @return
      */
     @PostMapping("/update")
-    @Log(title = "个人信息",info = "更新个人信息")
+    @OperatedLog(title = "个人信息",info = "更新个人信息")
     public Result update(@RequestBody @Valid SimpleUserParam param){
         param.setUserId(SecurityUtils.getUserId());
         //不允许用户自己更新备注信息
@@ -77,7 +77,8 @@ public class ProfileController extends BaseController {
             param.setHeadimgurl(serverConfig.getUrl() + Constants.RESOURCE_PREFIX + "/avatar/" + filename);
         }
         if (StringUtils.isNull(param.getHeadimgurl()))param.setHeadimgurl(defaultHeadimgurl);
-        return Result.result(userService.updateById(param.toSysUser()));
+        if (userService.updateById(param.toSysUser()))return Result.success("保存成功");
+            return Result.error("保存失败");
     }
 
     /**
@@ -87,7 +88,7 @@ public class ProfileController extends BaseController {
      * @return
      */
     @PostMapping("/updateUserAuthByPassword")
-    @Log(title = "个人信息",info = "修改密码")
+    @OperatedLog(title = "个人信息",info = "修改密码")
     public Result updateUserAuthByPassword(@RequestBody @Valid SimpleUpdatePasswordParam param){
         Long userId = SecurityUtils.getUserId();
         param.setUserId(userId);
@@ -100,7 +101,7 @@ public class ProfileController extends BaseController {
      * @return
      */
     @GetMapping("/getUserAuthInfo")
-    public Result<SysUserAuth> getUserAuthInfo(){
-        return Result.success(userAuthService.getPasswordTypeByUserId(SecurityUtils.getUserId()));
+    public SysUserAuth getUserAuthInfo(){
+        return userAuthService.getPasswordTypeByUserId(SecurityUtils.getUserId());
     }
 }

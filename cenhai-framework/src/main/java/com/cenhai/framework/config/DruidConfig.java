@@ -9,6 +9,9 @@ import org.springframework.context.annotation.Bean;
 import javax.servlet.*;
 import java.io.IOException;
 
+/**
+ * 数据源配置
+ */
 public class DruidConfig {
     /**
      * 去除监控页面底部的广告
