@@ -31,7 +31,7 @@
         <jwt.version>0.9.1</jwt.version>
         <bitwalker.version>1.21</bitwalker.version>
         <commons.lang3.version>3.9</commons.lang3.version>
-        <kaptcha.version>2.3.2</kaptcha.version>
+        <captcha.version>2.2.2</captcha.version>
         <spring-brick.version>3.0.2</spring-brick.version>
     </properties>
 
@@ -93,11 +93,11 @@
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons.lang3.version}</version>
             </dependency>
-            <!-- 验证码 -->
+            <!--图形验证码-->
             <dependency>
-                <groupId>com.github.penggle</groupId>
-                <artifactId>kaptcha</artifactId>
-                <version>${kaptcha.version}</version>
+                <groupId>com.pig4cloud.plugin</groupId>
+                <artifactId>captcha-spring-boot-starter</artifactId>
+                <version>${captcha.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.gitee.starblues</groupId>
