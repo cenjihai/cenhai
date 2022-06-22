@@ -2,7 +2,7 @@ package com.cenhai.admin.controller;
 
 import com.cenhai.common.web.controller.BaseController;
 import com.cenhai.common.web.domain.Result;
-import com.cenhai.framework.annotation.OperatedLog;
+import com.cenhai.framework.annotation.Log;
 import com.cenhai.system.domain.SysUserAuth;
 import com.cenhai.system.service.SysUserAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class UserAuthController extends BaseController {
      * @return
      */
     @PostMapping("/updateOrSaveUserAuthByPassword")
-    @OperatedLog(title = "账号管理",info = "更新或设置用户账号和密码")
+    @Log(operType = "账号管理",desc = "'更新或设置用户账号和密码'")
     public Result updateOrSaveUserAuthByPassword(@RequestBody SysUserAuth userAuth){
         if (userAuthService.saveOrUpdateUserAuthByPassword(userAuth))return Result.success("保存成功");
         return Result.error("保存失败");

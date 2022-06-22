@@ -19,4 +19,10 @@ public interface SysOperlogService extends IService<SysOperlog> {
      * @return
      */
     List<SysOperlog> listOperlog(OperlogQueryParam param);
+
+    /**
+     * 清空日志
+     * @return
+     */
+    boolean clean();
 }

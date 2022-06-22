@@ -9,7 +9,7 @@ public class OperlogQueryParam extends BaseParam {
 
     private Long userId;
 
-    private String title;
+    private String operType;
 
     private String status;
 }

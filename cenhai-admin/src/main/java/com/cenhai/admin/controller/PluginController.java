@@ -5,7 +5,7 @@ import com.cenhai.common.utils.page.PageUtils;
 import com.cenhai.common.utils.page.TableDataInfo;
 import com.cenhai.common.web.controller.BaseController;
 import com.cenhai.common.web.domain.Result;
-import com.cenhai.framework.annotation.OperatedLog;
+import com.cenhai.framework.annotation.Log;
 import com.cenhai.system.domain.SysPlugin;
 import com.cenhai.system.param.PluginQueryParam;
 import com.cenhai.system.service.SysPluginService;
@@ -45,7 +45,7 @@ public class PluginController extends BaseController {
      * @return
      */
     @PostMapping("/uninstall/{pluginId}")
-    @OperatedLog(title = "插件管理", info = "卸载插件")
+    @Log(operType = "插件管理", desc = "'卸载ID为[' + #pluginId + ']的插件'")
     public Result uninstall(@PathVariable String pluginId){
         try {
             pluginOperator.uninstall(pluginId, true, true);
@@ -61,6 +61,7 @@ public class PluginController extends BaseController {
      * @return
      */
     @PostMapping("/upload")
+    @Log(operType = "插件管理", desc = "'上传并安装插件'", saveData = false)
     public Result upload(@RequestParam("jarFile")MultipartFile multipartFile){
         try {
             UploadParam uploadParam = UploadParam.byMultipartFile(multipartFile)
@@ -96,7 +97,7 @@ public class PluginController extends BaseController {
      * @return
      */
     @PostMapping("/changeStatus")
-    @OperatedLog(title = "插件管理", info = "启动或关闭插件")
+    @Log(operType = "插件管理", desc = "'启动或关闭ID为[' + #plugin + ']的插件'")
     public Result changeStatus(@RequestBody SysPlugin plugin){
         try {
             if (Constants.NORMAL.equals(plugin.getStatus())){

@@ -15,6 +15,8 @@ import java.util.List;
 public interface SysOperlogMapper extends BaseMapper<SysOperlog> {
 
     List<SysOperlog> listOperlog(OperlogQueryParam param);
+
+    int clean();
 }
 
 

@@ -3,7 +3,7 @@ package com.cenhai.admin.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cenhai.common.web.controller.BaseController;
 import com.cenhai.common.web.domain.Result;
-import com.cenhai.framework.annotation.OperatedLog;
+import com.cenhai.framework.annotation.Log;
 import com.cenhai.system.domain.SysMenu;
 import com.cenhai.system.domain.vo.MenuTreeTable;
 import com.cenhai.system.service.SysMenuService;
@@ -40,8 +40,8 @@ public class MenuController extends BaseController {
     }
 
     @PostMapping("/updateOrSave")
-    @OperatedLog(title = "菜单管理",info = "更新菜单")
-    public Object update(@RequestBody SysMenu menu){
+    @Log(operType = "菜单管理",desc = "'更新或新增菜单'")
+    public Object updateOrSave(@RequestBody SysMenu menu){
         try {
             if (menuService.saveOrUpdate(menu)){
                 return new MenuTreeTable(menu);
@@ -53,7 +53,7 @@ public class MenuController extends BaseController {
     }
 
     @PostMapping("/delete/{menuId}")
-    @OperatedLog(title = "配置管理",info = "删除菜单")
+    @Log(operType = "配置管理",desc = "'删除编号为[' + #menuId + ']的菜单'")
     public Result delete(@PathVariable Long menuId){
         if (menuService.deleteMenuByMenuId(menuId))return Result.success("删除成功");
             return Result.error("删除失败");
@@ -76,7 +76,7 @@ public class MenuController extends BaseController {
      * @return
      */
     @PostMapping("/assignToRole/{roleId}")
-    @OperatedLog(title = "配置管理",info = "分配菜单给角色")
+    @Log(operType = "配置管理",desc = "'分配编号为[' + #menuIds + ']给编号为[' + #roleId +']的角色'")
     public Result assignToRole(@PathVariable Long roleId, @RequestBody Collection<Long> menuIds){
         if (menuService.assignToRoleByRoleId(roleId, menuIds))return Result.success("保存成功");
             return Result.error("保存失败");

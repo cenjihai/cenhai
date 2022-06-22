@@ -27,6 +27,16 @@ public class SysOperlogServiceImpl extends ServiceImpl<SysOperlogMapper, SysOper
     public List<SysOperlog> listOperlog(OperlogQueryParam param) {
         return baseMapper.listOperlog(param);
     }
+
+    /**
+     * 清空日志
+     *
+     * @return
+     */
+    @Override
+    public boolean clean() {
+        return baseMapper.clean() > 0;
+    }
 }
 
 

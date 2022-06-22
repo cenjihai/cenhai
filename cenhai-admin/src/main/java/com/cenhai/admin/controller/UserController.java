@@ -5,7 +5,7 @@ import com.cenhai.common.utils.StringUtils;
 import com.cenhai.common.utils.page.TableDataInfo;
 import com.cenhai.common.web.controller.BaseController;
 import com.cenhai.common.web.domain.Result;
-import com.cenhai.framework.annotation.OperatedLog;
+import com.cenhai.framework.annotation.Log;
 import com.cenhai.system.param.SimpleUserParam;
 import com.cenhai.system.param.UserQueryParam;
 import com.cenhai.system.service.SysConfigService;
@@ -44,7 +44,7 @@ public class UserController extends BaseController {
      * @return
      */
     @PostMapping("/updateOrSave")
-    @OperatedLog(title = "用户管理",info = "更新或者新增用户")
+    @Log(operType = "用户管理",desc = "'更新或者新增用户'")
     public Result updateOrSave(@RequestBody @Valid SimpleUserParam param){
         //如果是新增切未设置头像，则使用默认头像
         if (StringUtils.isNull(param.getHeadimgurl()) && StringUtils.isNotNull(param.getUserId()))
@@ -59,7 +59,7 @@ public class UserController extends BaseController {
      * @return
      */
     @PostMapping("/delete")
-    @OperatedLog(title = "用户管理",info = "删除用户")
+    @Log(operType = "用户管理",desc = "'删除用户ID[' + #ids + ']'")
     public Result delete(@RequestBody Collection<Long> ids){
         if (userService.removeBatchByIds(ids))return Result.success("删除成功");
         return Result.error("删除失败");
@@ -72,7 +72,7 @@ public class UserController extends BaseController {
      * @return
      */
     @PostMapping("/updateRole/{userId}")
-    @OperatedLog(title = "用户管理",info = "更新用户的角色")
+    @Log(operType = "用户管理",desc = "'更新用户ID为[' + #userId + ']的角色，角色ID[' + #roleIds + ']'")
     public Result updateRole(@RequestBody Collection<Long> roleIds, @PathVariable Long userId){
         if (userService.updateUserRoleByUserId(userId, roleIds))return Result.success("保存成功");
         return Result.error("保存失败");

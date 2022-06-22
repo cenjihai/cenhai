@@ -4,7 +4,7 @@ import com.cenhai.common.constant.Constants;
 import com.cenhai.common.enums.ResultCode;
 import com.cenhai.common.exception.ApiException;
 import com.cenhai.common.utils.StringUtils;
-import com.cenhai.framework.annotation.OperatedLog;
+import com.cenhai.framework.annotation.Log;
 import com.cenhai.support.redis.service.RedisCache;
 import com.cenhai.system.service.SysConfigService;
 import com.pig4cloud.captcha.ArithmeticCaptcha;
@@ -46,7 +46,7 @@ public class TokenEndpoint {
 
 
     @RequestMapping(value = {"/auth/token"},method = {RequestMethod.POST})
-    @OperatedLog(title = "登录日志", info = "系统登录入口")
+    @Log(operType = "登录日志", desc = "'系统登录入口'")
     public Map<String,String> authenticate(@RequestBody Map<String,String> principal){
         validateCaptcha(principal.get("code"), principal.get("uuid"));
         Authentication authentication = new UsernamePasswordAuthenticationToken(principal.get("username"),principal.get("password"));

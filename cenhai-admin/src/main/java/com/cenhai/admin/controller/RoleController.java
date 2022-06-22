@@ -6,7 +6,7 @@ import com.cenhai.common.utils.page.PageUtils;
 import com.cenhai.common.utils.page.TableDataInfo;
 import com.cenhai.common.web.controller.BaseController;
 import com.cenhai.common.web.domain.Result;
-import com.cenhai.framework.annotation.OperatedLog;
+import com.cenhai.framework.annotation.Log;
 import com.cenhai.system.domain.SysRole;
 import com.cenhai.system.param.RoleQueryParam;
 import com.cenhai.system.service.SysRoleService;
@@ -47,7 +47,7 @@ public class RoleController extends BaseController {
     }
 
     @PostMapping("/updateOrSave")
-    @OperatedLog(title = "角色管理",info = "更新或新增角色")
+    @Log(operType = "角色管理",desc = "'更新或新增角色'")
     public Result updateOrSave(@RequestBody SysRole role){
         try {
             if (roleService.saveOrUpdate(role))return Result.success("保存成功");
@@ -58,7 +58,7 @@ public class RoleController extends BaseController {
     }
 
     @PostMapping("/delete")
-    @OperatedLog(title = "角色管理",info = "删除角色")
+    @Log(operType = "角色管理",desc = "'删除角色'")
     public Result delete(@RequestBody Collection<Long> ids){
         if (roleService.removeByIds(ids))return Result.success("删除成功");
             return Result.error("删除失败");

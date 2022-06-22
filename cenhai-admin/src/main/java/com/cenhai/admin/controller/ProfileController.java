@@ -6,7 +6,7 @@ import com.cenhai.common.utils.ImageUtils;
 import com.cenhai.common.utils.StringUtils;
 import com.cenhai.common.web.controller.BaseController;
 import com.cenhai.common.web.domain.Result;
-import com.cenhai.framework.annotation.OperatedLog;
+import com.cenhai.framework.annotation.Log;
 import com.cenhai.framework.config.ServerConfig;
 import com.cenhai.framework.security.SecurityUtils;
 import com.cenhai.system.domain.SysUserAuth;
@@ -61,7 +61,7 @@ public class ProfileController extends BaseController {
      * @return
      */
     @PostMapping("/update")
-    @OperatedLog(title = "个人信息",info = "更新个人信息")
+    @Log(operType = "个人信息",desc = "'更新用户ID为[' + #param.userId + ']的用户信息'")
     public Result update(@RequestBody @Valid SimpleUserParam param){
         param.setUserId(SecurityUtils.getUserId());
         //不允许用户自己更新备注信息
@@ -88,7 +88,7 @@ public class ProfileController extends BaseController {
      * @return
      */
     @PostMapping("/updateUserAuthByPassword")
-    @OperatedLog(title = "个人信息",info = "修改密码")
+    @Log(operType = "个人信息",desc = "'修改用户ID为[' + #param.userId + ']的密码'")
     public Result updateUserAuthByPassword(@RequestBody @Valid SimpleUpdatePasswordParam param){
         Long userId = SecurityUtils.getUserId();
         param.setUserId(userId);

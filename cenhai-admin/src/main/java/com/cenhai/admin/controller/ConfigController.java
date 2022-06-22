@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cenhai.common.constant.Constants;
 import com.cenhai.common.web.controller.BaseController;
 import com.cenhai.common.web.domain.Result;
-import com.cenhai.framework.annotation.OperatedLog;
+import com.cenhai.framework.annotation.Log;
 import com.cenhai.system.domain.SysConfig;
 import com.cenhai.system.domain.SysConfigGroup;
 import com.cenhai.system.param.SimpleUpdateConfigParam;
@@ -55,7 +55,7 @@ public class ConfigController extends BaseController {
      * @return
      */
     @PostMapping("/batchUpdate")
-    @OperatedLog(title = "配置管理",info = "更新配置")
+    @Log(operType = "配置管理",desc = "'更新配置'")
     public Result batchUpdate(@RequestBody List<SimpleUpdateConfigParam> configForms){
         if (configService.batchUpdateByAdmin(configForms))return Result.success("配置更新成功！");
             return Result.error("更新失败");

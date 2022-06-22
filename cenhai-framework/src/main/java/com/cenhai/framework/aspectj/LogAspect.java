@@ -5,7 +5,7 @@ import com.cenhai.common.constant.Constants;
 import com.cenhai.common.utils.IpUtils;
 import com.cenhai.common.utils.ServletUtils;
 import com.cenhai.common.utils.StringUtils;
-import com.cenhai.framework.annotation.OperatedLog;
+import com.cenhai.framework.annotation.Log;
 import com.cenhai.framework.security.SecurityUtils;
 import com.cenhai.framework.security.SystemUserDetails;
 import com.cenhai.system.domain.SysOperlog;
@@ -14,9 +14,16 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
+import org.springframework.expression.EvaluationContext;
+import org.springframework.expression.Expression;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
@@ -25,8 +32,8 @@ import org.springframework.web.servlet.HandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -34,7 +41,7 @@ import java.util.Map;
  */
 @Aspect
 @Component
-public class OperatedLogAspect {
+public class LogAspect {
 
     private static final Logger logger = LoggerFactory.getLogger("sys-operlog");
 
@@ -44,32 +51,31 @@ public class OperatedLogAspect {
     /**
      * 处理完请求后执行
      * @param joinPoint
-     * @param operatedLog
+     * @param log
      * @param obj
      */
-    @AfterReturning(pointcut = "@annotation(operatedLog)", returning = "obj")
-    public void doAfterReturning(JoinPoint joinPoint, OperatedLog operatedLog, Object obj){
-        logHandler(joinPoint, operatedLog,null,obj);
+    @AfterReturning(pointcut = "@annotation(log)", returning = "obj")
+    public void doAfterReturning(JoinPoint joinPoint, Log log, Object obj){
+        logHandler(joinPoint, log,null,obj);
     }
 
     /**
      * 拦截异常
      * @param joinPoint
-     * @param operatedLog
+     * @param log
      * @param e
      */
-    @AfterThrowing(value = "@annotation(operatedLog)", throwing = "e")
-    public void doAfterThrowing(JoinPoint joinPoint, OperatedLog operatedLog, Exception e){
-        logHandler(joinPoint, operatedLog, e,null);
+    @AfterThrowing(value = "@annotation(log)", throwing = "e")
+    public void doAfterThrowing(JoinPoint joinPoint, Log log, Exception e){
+        logHandler(joinPoint, log, e,null);
     }
 
-    private void logHandler(final JoinPoint joinPoint, OperatedLog operatedLog, final Exception e, Object obj){
+    private void logHandler(final JoinPoint joinPoint, Log log, final Exception e, Object obj){
         SysOperlog operlog = new SysOperlog();
         try {
             SystemUserDetails userDetails = SecurityUtils.getUserDetails();
             if (userDetails != null) {
                 operlog.setUserId(userDetails.getUserId());
-                operlog.setUserDetails(userDetails.getAccessToken()+ "-" + userDetails.getIpaddr());
             }
             operlog.setStatus(Constants.NORMAL);
             operlog.setOperIp(IpUtils.getIpAddr(ServletUtils.getRequest()));
@@ -79,17 +85,39 @@ public class OperatedLogAspect {
                 operlog.setStatus(Constants.DISABLE);
             }
             operlog.setAction(joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()");
-            Map<String,String> params = getRequestParams(joinPoint);
-            params.put("response", StringUtils.substring(JSON.toJSONString(obj), 0, 2000));
-            operlog.setParams(JSON.toJSONString(params));
+            if (log.saveData()){
+                //保存请求响应参数
+                operlog.setRespData(StringUtils.substring(JSON.toJSONString(obj), 0, 2000));
+                operlog.setReqParam(getRequestParams(joinPoint));
+            }
         }catch (Exception e1){
             logger.error("日志记录错误", e1);
             operlog.setErrMsg(StringUtils.substring(e1.getMessage(), 0, 2000));
             operlog.setStatus(Constants.DISABLE);
         }
-        operlog.setTitle(operatedLog.title());
-        operlog.setInfo(operatedLog.info());
+        operlog.setOperType(log.operType());
+        operlog.setOperDesc(parserSpel(log.desc(),joinPoint));
         operlogService.save(operlog);
+    }
+
+    /**
+     * 解析spel
+     * @param spel
+     * @param joinPoint
+     * @return
+     */
+    private String parserSpel(String spel, JoinPoint joinPoint){
+        ExpressionParser parser = new SpelExpressionParser();
+        LocalVariableTableParameterNameDiscoverer discoverer = new LocalVariableTableParameterNameDiscoverer();
+        Object[] args = joinPoint.getArgs();
+        Expression expression = parser.parseExpression(spel);
+        Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
+        String[] params = discoverer.getParameterNames(method);
+        EvaluationContext context = new StandardEvaluationContext();
+        for (int len = 0; len < params.length; len++) {
+            context.setVariable(params[len], args[len]);
+        }
+        return expression.getValue(context,String.class);
     }
 
     /**
@@ -97,22 +125,19 @@ public class OperatedLogAspect {
      * @param joinPoint
      * @return
      */
-    private Map<String, String> getRequestParams(JoinPoint joinPoint)
+    private String getRequestParams(JoinPoint joinPoint)
     {
-        Map<String,String> map = new HashMap<>();
         String requestMethod = ServletUtils.getRequest().getMethod();
-        map.put("method", requestMethod);
         if (HttpMethod.PUT.name().equals(requestMethod) || HttpMethod.POST.name().equals(requestMethod))
         {
             String params = argsArrayToString(joinPoint.getArgs());
-            map.put("request",StringUtils.substring(params, 0, 2000));
+            return StringUtils.substring(params, 0, 2000);
         }
         else
         {
             Map<?, ?> paramsMap = (Map<?, ?>) ServletUtils.getRequest().getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
-            map.put("request",StringUtils.substring(paramsMap.toString(), 0, 2000));
+            return StringUtils.substring(paramsMap.toString(), 0, 2000);
         }
-        return map;
     }
 
     /**

@@ -7,37 +7,37 @@
     <resultMap id="BaseResultMap" type="com.cenhai.system.domain.SysOperlog">
             <id property="operId" column="oper_id" jdbcType="BIGINT"/>
             <result property="userId" column="user_id" jdbcType="BIGINT"/>
-            <result property="title" column="title" jdbcType="VARCHAR"/>
-            <result property="info" column="info" jdbcType="VARCHAR"/>
+            <result property="operType" column="oper_type" jdbcType="VARCHAR"/>
+            <result property="operDesc" column="oper_desc" jdbcType="VARCHAR"/>
             <result property="operIp" column="oper_ip" jdbcType="VARCHAR"/>
             <result property="operUrl" column="oper_url" jdbcType="VARCHAR"/>
-            <result property="params" column="params" jdbcType="VARCHAR"/>
+            <result property="reqParam" column="req_param" jdbcType="VARCHAR"/>
             <result property="errMsg" column="err_msg" jdbcType="VARCHAR"/>
             <result property="status" column="status" jdbcType="CHAR"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-            <result property="userDetails" column="user_details" jdbcType="VARCHAR"/>
+            <result property="respData" column="resp_data" jdbcType="VARCHAR"/>
             <result property="action" column="action" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        oper_id,user_id,title,
-        info,oper_ip,oper_url,
-        params,err_msg,status,
-        create_time,user_details,action
+        oper_id,user_id,oper_type,
+        oper_desc,oper_ip,oper_url,
+        req_param,resp_data,err_msg,status,
+        create_time,action
     </sql>
 
     <select id="listOperlog" resultMap="BaseResultMap" parameterType="com.cenhai.system.param.OperlogQueryParam">
-        select oper_id,user_id,title,
-        info,oper_ip,oper_url,status,
-        create_time,user_details from sys_operlog where 1 = 1
+        select oper_id,user_id,oper_type,
+        oper_desc,oper_ip,status,
+        create_time from sys_operlog where 1 = 1
         <if test="userId != null and userId !=''">
             and user_id = #{userId}
         </if>
         <if test="status != null and status !=''">
             and status = #{status}
         </if>
-        <if test="title != null and title !=''">
-            and title = #{title}
+        <if test="operType != null and operType !=''">
+            and oper_type = #{operType}
         </if>
         <if test="startTime != null and startTime != ''"><!-- 开始时间检索 -->
             and date_format(create_time,'%y%m%d') &gt;= date_format(#{startTime},'%y%m%d')
@@ -47,4 +47,8 @@
         </if>
         order by oper_id desc
     </select>
+    
+    <update id="clean" >
+        truncate table sys_operlog
+    </update>
 </mapper>

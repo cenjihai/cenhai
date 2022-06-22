@@ -27,14 +27,14 @@ public class SysOperlog implements Serializable {
     private Long userId;
 
     /**
-     * 标题
+     * 操作类型
      */
-    private String title;
+    private String operType;
 
     /**
      * 说明信息
      */
-    private String info;
+    private String operDesc;
 
     /**
      * 操作者IP
@@ -47,9 +47,14 @@ public class SysOperlog implements Serializable {
     private String operUrl;
 
     /**
-     * 请求和响应json串
+     * 请求json串
      */
-    private String params;
+    private String reqParam;
+
+    /**
+     * 响应数据
+     */
+    private String respData;
 
     /**
      * 异常消息
@@ -67,11 +72,6 @@ public class SysOperlog implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
-
-    /**
-     * 登录用户信息
-     */
-    private String userDetails;
 
     /**
      * 处理的方法

@@ -4,14 +4,13 @@ import com.cenhai.common.utils.page.PageUtils;
 import com.cenhai.common.utils.page.TableDataInfo;
 import com.cenhai.common.web.controller.BaseController;
 import com.cenhai.common.web.domain.Result;
-import com.cenhai.framework.annotation.OperatedLog;
+import com.cenhai.framework.annotation.Log;
 import com.cenhai.system.domain.SysOperlog;
 import com.cenhai.system.param.OperlogQueryParam;
 import com.cenhai.system.service.SysOperlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
 
 
 @RestController
@@ -35,16 +34,16 @@ public class MonitorController extends BaseController {
     }
 
     /**
-     * 删除
-     * @param ids
+     * 清空日志
      * @return
      */
-    @PostMapping("/operlog/delete")
-    @OperatedLog(title = "操作日志",info = "删除日志")
-    public Result deleteOperlog(@RequestBody Collection<Long> ids){
-        if (operlogService.removeByIds(ids))return Result.success("删除成功");
-            return Result.error("删除失败");
+    @DeleteMapping("/operlog/clean")
+    @Log(operType = "操作日志管理", desc = "'清空日志'")
+    public Result cleanOperlog(){
+        operlogService.clean();
+        return Result.success("清空成功");
     }
+
 
     /**
      * 详情
