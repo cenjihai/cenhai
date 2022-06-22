@@ -26,7 +26,6 @@
         <dependency>
             <groupId>com.cenhai</groupId>
             <artifactId>cenhai-framework</artifactId>
-            <version>1.0.0</version>
         </dependency>
 
         <dependency>

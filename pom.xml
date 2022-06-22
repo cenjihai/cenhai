@@ -33,6 +33,7 @@
         <commons.lang3.version>3.9</commons.lang3.version>
         <captcha.version>2.2.2</captcha.version>
         <spring-brick.version>3.0.2</spring-brick.version>
+        <cenhai.version>1.0.0</cenhai.version>
     </properties>
 
     <dependencyManagement>
@@ -99,10 +100,31 @@
                 <artifactId>captcha-spring-boot-starter</artifactId>
                 <version>${captcha.version}</version>
             </dependency>
+            <!--插件依赖-->
             <dependency>
                 <groupId>com.gitee.starblues</groupId>
                 <artifactId>spring-brick</artifactId>
                 <version>${spring-brick.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.cenhai</groupId>
+                <artifactId>cenhai-common</artifactId>
+                <version>${cenhai.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.cenhai</groupId>
+                <artifactId>cenhai-system</artifactId>
+                <version>${cenhai.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.cenhai</groupId>
+                <artifactId>cenhai-support-redis</artifactId>
+                <version>${cenhai.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.cenhai</groupId>
+                <artifactId>cenhai-framework</artifactId>
+                <version>${cenhai.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

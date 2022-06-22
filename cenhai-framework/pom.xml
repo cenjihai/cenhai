@@ -31,12 +31,10 @@
         <dependency>
             <groupId>com.cenhai</groupId>
             <artifactId>cenhai-support-redis</artifactId>
-            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.cenhai</groupId>
             <artifactId>cenhai-system</artifactId>
-            <version>1.0.0</version>
         </dependency>
         <!--图形验证码-->
         <dependency>
