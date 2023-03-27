@@ -8,7 +8,6 @@
         <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
     <artifactId>cenhai-admin</artifactId>
 
     <dependencies>
@@ -28,27 +27,16 @@
             <artifactId>cenhai-framework</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.gitee.starblues</groupId>
-            <artifactId>spring-brick</artifactId>
-        </dependency>
-
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
-                <groupId>com.gitee.starblues</groupId>
-                <artifactId>spring-brick-maven-packager</artifactId>
-                <version>3.0.2</version>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.2.6.RELEASE</version>
                 <configuration>
-                    <mode>main</mode>
-                    <mainConfig>
-                        <mainClass>com.cenhai.admin.AdminApplication</mainClass>
-                        <packageType>jar</packageType>
-                        <fileName>${project.artifactId}</fileName>
-                    </mainConfig>
-                    <includeSystemScope>false</includeSystemScope>
+                    <mainClass>com.cenhai.admin.AdminApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>
@@ -59,5 +47,6 @@
                 </executions>
             </plugin>
         </plugins>
+        <finalName>${project.artifactId}</finalName>
     </build>
 </project>

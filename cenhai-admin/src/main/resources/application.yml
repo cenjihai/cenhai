@@ -5,23 +5,8 @@ cenhai:
   #版本
   version: 1.0
   #文件路径
-  #profile: /Users/cenjihai/temp
+  #profile: E://TestTemp
   profile: /www/wwwroot/temp
-#插件开发配置
-plugin:
-  # 开启解密校检
-  decrypt:
-    enable: true
-    className: com.gitee.starblues.common.cipher.AesPluginCipher
-    props:
-      secretKey: mmfvXes1XckCi8F/y9i0uQ==
-  runMode: prod
-  mainPackage: com.cenhai
-  pluginPath:
-    #- /Users/cenjihai/temp/plugins
-    - /www/wwwroot/temp/plugins
-  #backupPath: /Users/cenjihai/temp/backup
-  backupPath: /www/wwwroot/temp/backup
 server:
   port: 8080
 spring:

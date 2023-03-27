@@ -4,9 +4,9 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
     druid:
-      url: jdbc:mysql://124.221.213.135:3306/cenjihai_errands?setUnicode=true&characterEncoding=utf8
-      username: cenjihai_errands
-      password: 2XN2BSEGnGihfzh4
+      url: jdbc:mysql://124.221.213.135:3306/cenhai_mysql?setUnicode=true&characterEncoding=utf8
+      username: cenhai_mysql
+      password: 6pXKanFHAGT8GCAC
       # 初始连接数
       initialSize: 5
       # 最小连接池数量

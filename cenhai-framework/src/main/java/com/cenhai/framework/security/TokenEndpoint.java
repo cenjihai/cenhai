@@ -45,6 +45,11 @@ public class TokenEndpoint {
     private SysConfigService configService;
 
 
+    /**
+     * 账号密码登录入口
+     * @param principal
+     * @return
+     */
     @RequestMapping(value = {"/auth/token"},method = {RequestMethod.POST})
     @Log(operType = "登录日志", desc = "'系统登录入口'")
     public Map<String,String> authenticate(@RequestBody Map<String,String> principal){
