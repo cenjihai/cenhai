@@ -3,7 +3,7 @@ package com.cenhai.system.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cenhai.common.constant.Constants;
-import com.cenhai.common.exception.ApiException;
+import com.cenhai.common.exception.DefaultException;
 import com.cenhai.common.utils.StringUtils;
 import com.cenhai.system.domain.SysUserAuth;
 import com.cenhai.system.param.SimpleUpdatePasswordParam;
@@ -50,7 +50,7 @@ public class SysUserAuthServiceImpl extends ServiceImpl<SysUserAuthMapper, SysUs
         try {
             return saveOrUpdate(userAuth);
         }catch (DuplicateKeyException e){
-            throw new ApiException("用户名已存在");
+            throw new DefaultException("用户名已存在");
         }
     }
 
@@ -63,10 +63,10 @@ public class SysUserAuthServiceImpl extends ServiceImpl<SysUserAuthMapper, SysUs
     @Override
     public boolean updatePasswordByUserId(SimpleUpdatePasswordParam param) {
         SysUserAuth userAuth = getPasswordTypeByUserId(param.getUserId());
-        if (StringUtils.isNull(userAuth))throw new ApiException("未开启密码认证方式!");
+        if (StringUtils.isNull(userAuth))throw new DefaultException("未开启密码认证方式!");
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         if (!passwordEncoder.matches(param.getOldCredential(),userAuth.getCredential()))
-            throw new ApiException("原密码错误");
+            throw new DefaultException("原密码错误");
         userAuth.setCredential(passwordEncoder.encode(param.getCredential()));
         return updateById(userAuth);
     }

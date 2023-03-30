@@ -1,6 +1,6 @@
 package com.cenhai.framework;
 
-import com.cenhai.common.exception.ApiException;
+import com.cenhai.common.exception.DefaultException;
 import com.cenhai.common.web.domain.Result;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
@@ -19,14 +19,14 @@ import java.util.Objects;
 public class ControllerExceptionAdvice {
 
     /**
-     * 接口异常处理，返回500
+     * 默认异常处理
      * @param e
      * @return
      */
-    @ExceptionHandler(ApiException.class)
-    public Result apiException(ApiException e){
+    @ExceptionHandler(DefaultException.class)
+    public Result defaultException(DefaultException e){
         e.printStackTrace();
-        return new Result(e.getCode(),e.getMsg(),e.getMessage());
+        return Result.error(e.getMsg());
     }
 
     /**

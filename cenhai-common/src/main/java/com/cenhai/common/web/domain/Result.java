@@ -32,23 +32,31 @@ public class Result{
         this.data = data;
     }
 
+    /**
+     * 通用返回成功
+     * @param data 返回的数据
+     * @return
+     */
     public static Result success(Object data){
         return new Result(ResultCode.OK, data);
     }
 
+    /**
+     * 通用返回错误
+     * @param msg 错误信息
+     * @return
+     */
     public static Result error(String msg){
-        return new Result(ResultCode.ERROR,msg);
+        return new Result(ResultCode.ERROR.getCode(),msg,null);
     }
 
-    public static Result error(StatusCode statusCode, String msg){
-        return new Result(statusCode,msg);
-    }
-
-    public static Result resultBool(boolean bool, String msg){
-        if (bool){
-            return new Result(ResultCode.OK,msg);
-        }else {
-            return new Result(ResultCode.ERROR, msg);
-        }
+    /**
+     * 返回错误
+     * @param statusCode 错误枚举
+     * @param data 错误时携带的数据
+     * @return
+     */
+    public static Result error(StatusCode statusCode, String data){
+        return new Result(statusCode,data);
     }
 }

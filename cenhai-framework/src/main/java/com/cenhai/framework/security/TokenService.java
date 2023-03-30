@@ -1,6 +1,6 @@
 package com.cenhai.framework.security;
 
-import com.cenhai.common.exception.ApiException;
+import com.cenhai.common.exception.DefaultException;
 import com.cenhai.common.utils.IpUtils;
 import com.cenhai.support.redis.service.RedisCache;
 import eu.bitwalker.useragentutils.UserAgent;
@@ -65,7 +65,7 @@ public class TokenService {
         String clientDetails = userAgent.getOperatingSystem().getName() + "-" + userAgent.getBrowser().getName();
         String ipaddr = IpUtils.getIpAddr(request);
         if (!userDetails.getClientDetails().equals(clientDetails) && userDetails.getIpaddr().equals(ipaddr)){
-            throw new ApiException("登录环境异常，请重新登录");
+            throw new DefaultException("登录环境异常，请重新登录");
         }
     }
 

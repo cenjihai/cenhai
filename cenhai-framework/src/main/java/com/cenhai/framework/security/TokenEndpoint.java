@@ -1,8 +1,7 @@
 package com.cenhai.framework.security;
 
 import com.cenhai.common.constant.Constants;
-import com.cenhai.common.enums.ResultCode;
-import com.cenhai.common.exception.ApiException;
+import com.cenhai.common.exception.DefaultException;
 import com.cenhai.common.utils.StringUtils;
 import com.cenhai.framework.annotation.Log;
 import com.cenhai.support.redis.service.RedisCache;
@@ -94,10 +93,10 @@ public class TokenEndpoint {
         String key = Constants.CAPTCHA_REDIS_KEY + StringUtils.nvl(uuid,"");
         String captcha = redisCache.getCacheObject(key);
         if (captcha == null){
-            throw new ApiException(ResultCode.ERROR,"验证码已过期");
+            throw new DefaultException("验证码已过期");
         }
         if (!code.equalsIgnoreCase(captcha)){
-            throw new ApiException(ResultCode.ERROR,"验证码错误");
+            throw new DefaultException("验证码错误");
         }
     }
 

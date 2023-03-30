@@ -12,24 +12,19 @@
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
             <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
             <result property="extend" column="extend" jdbcType="OTHER"/>
-            <result property="country" column="country" jdbcType="VARCHAR"/>
-            <result property="province" column="province" jdbcType="VARCHAR"/>
-            <result property="city" column="city" jdbcType="VARCHAR"/>
             <result property="remark" column="remark" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         user_id,nickname,sex,
         headimgurl,create_time,update_time,
-        extend,country,province,
-        city
+        extend
     </sql>
 
     <select id="listUser" resultMap="BaseResultMap" parameterType="com.cenhai.system.param.UserQueryParam">
         select DISTINCT u.user_id,u.nickname,u.sex,u.remark,
         u.headimgurl,u.create_time,u.update_time,
-        u.extend,u.country,u.province,
-        u.city from sys_user u
+        u.extend from sys_user u
         left join sys_user_auth ua on ua.user_id = u.user_id where u.deleted = 0
         <if test="userId != null and userId != ''">
             and u.user_id = #{userId}

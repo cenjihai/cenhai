@@ -8,7 +8,7 @@ cenhai:
   #profile: E://TestTemp
   profile: /www/wwwroot/temp
 server:
-  port: 8080
+  port: 8888
 spring:
   application:
     name: admin
